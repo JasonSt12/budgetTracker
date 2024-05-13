@@ -45,7 +45,7 @@
 
       {% csrf_token %}
       <label class="form-label">Username</label>
-      <input class="form-control border-black" type="text" name="Username"/>
+      <input class="form-control border-black" type="text" name="username"/>
 
       <label class="form-label">Password</label>
       <input class="form-control border-black" type="password" name="password"/>
@@ -53,7 +53,8 @@
       <label class="form-label">Confirm Password</label>
       <input class="form-control border-black" type="password" name="confirm_password"/>
 
-      <button class="btn btn-dark">Create Account</button>
+      <div class="text-danger">{{ error }}</div>
+      <button class="btn btn-dark" type="submit">Create Account</button>
 
     </form>
 

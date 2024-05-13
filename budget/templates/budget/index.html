@@ -51,10 +51,11 @@
       <label class="form-label">Password</label>
       <input class="form-control border-black" type="password" name="password" />
 
+      <div class='text-danger'>{{ error }}</div>
       <button class="btn btn-dark submit-button" type="submit">Log in</button>
 
       <p>
-        <a class="link-secondary "href="{% url "budget:createAccount" %}">Create An Account</a>
+        <a class="link-dark "href="{% url "budget:createAccount" %}">Create An Account</a>
       </p>
     </form>
 

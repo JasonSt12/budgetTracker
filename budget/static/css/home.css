@@ -28,6 +28,13 @@
     background-color: #5b6eb4;
 }
 
+.logout-link {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
 .menu-link {
     color: white;
     text-decoration: none;
@@ -44,6 +51,8 @@
 .menu-link:active {
     text-decoration: none;
 }
+
+
 
 #piechart {
     width: 100%;
