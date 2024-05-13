@@ -10,6 +10,9 @@ from dateutil.relativedelta import relativedelta
 def index(request):
     return render(request, 'budget/index.html')
 
+def createAccount(request):
+    return render(request, 'budget/createAccount.html')
+
 def home(request):
 
     expenses = Expense.objects.all()

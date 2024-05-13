@@ -22,5 +22,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('budget/', include('budget.urls')),
     path("", RedirectView.as_view(url="/budget/"))
-
 ]
