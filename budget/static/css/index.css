@@ -32,10 +32,10 @@ body, html {
 
 .right-column {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
     width: 35%;
-    background-color: rgb(240, 240, 244);
 }
 
 .input-form {
@@ -46,4 +46,8 @@ body, html {
     padding: 5px;
     border-radius: 10px;
     justify-content: space-between;
+}
+
+.submit-button {
+    
 }
