@@ -39,12 +39,11 @@ function drawChart() {
 }
 */
 
-
 const menuButton = document.querySelector('.menu-button')
 const dropdownButtons = document.querySelectorAll('.fa-angle-down')
 const collapseButtons = document.querySelectorAll('.fa-angle-up')
-
-
+const monthButtons = document.querySelectorAll('.month-button')
+const selectedMonth = document.getElementById('selected-month')
 
 let columnWidth = '0px'
 menuButton.addEventListener('click', function() {
@@ -81,5 +80,12 @@ for(let i = 0; i < dropdownButtons.length; i++) {
             collapseButtons[i].classList.add('hidden')
 
         }) 
+    })
+}
+
+for(let i = 0; i < monthButtons.length; i++) {
+    monthButtons[i].addEventListener('click', function() {
+        selectedMonth.value = monthButtons[i].textContent
+        this.closest('form').submit()
     })
 }

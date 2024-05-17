@@ -1,19 +1,18 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 from budget.models import Expense, Goal
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
-from budget.forms import LoginForm, CreateAccountForm
-
-# Create your views here.
+from budget.forms import LoginForm, CreateAccountForm, SelectMonthForm
 
 def index(request):
-    
+    print("in index")
     if request.user.is_authenticated:
-        return redirect('budget:home', permanent=True)
+        return redirect("budget:home")
     
     context = dict()
     error = ''
@@ -27,21 +26,20 @@ def index(request):
 
             if user is not None:
                 login(request, user)
-                return redirect('budget:home', permanent=True)
+                return redirect("budget:home")
             else:
                 error = 'username and password do not match'
         else:
             error = 'Invalid form data'
 
-
     context['error'] = error
     return render(request, 'budget/index.html', context)
 
 def createAccount(request):
+    print("in createAccount")
 
     context = dict()
     error = ''
-
     if request.method == 'POST':
         form = CreateAccountForm(request.POST)
 
@@ -58,8 +56,7 @@ def createAccount(request):
             else:
                 user = User.objects.create_user(username=username, password=pwd)
                 login(request, user)
-
-                return redirect('budget:home', permanent=True)
+                return redirect("budget:home")
         else:
             error = 'Invalid form data'
 
@@ -73,38 +70,67 @@ def logout_view(request):
 @login_required
 def home(request):
 
-    expenses = Expense.objects.all()
-    goal = Goal.objects.get(pk=1)
-    categories = set()
-
-    time_period_budget = goal.yearly_income / (12 / goal.timeSpan)
-    goal_json = goal.goal
-
-    category_data = dict()
-    for i in goal_json:
-        category_data[i] = [round(int(goal_json[i]) / 100 * time_period_budget, 2)]
-
-    spent_per_category = dict()
-    for exp in expenses:
-        categories.add(exp.category)
-        spent_per_category[exp.category] = spent_per_category.get(exp.category, 0) + exp.value
+    context = dict()
+    if Expense.objects.filter(user=request.user).exists():
+        expenses = Expense.objects.filter(user=request.user).all()
+        goal = None
+        categories, expense_months = set(), set()
+        category_data, spent_per_category = dict(), dict()
+        total_spent = 0
+        months = ["Jan, ", "Feb, ", "Mar, ", "Apr, ", "May, ", "Jun, ", 
+                  "Jul, ", "Aug, ", "Sep, ", "Oct, ", "Nov, ", "Dec, "]
+        selected_month = months[date.today().month - 1] + str(date.today().year)
+        if request.session.get('selected_month'):
+            selected_month = request.session.get('selected_month')
     
-    for i in spent_per_category:
-        category_data[i].append(spent_per_category[i])
-        category_data[i].append(round(category_data[i][0] - category_data[i][1], 2))
-        category_data[i].append(round(category_data[i][1] / category_data[i][0] * 100, 2))
+        if Goal.objects.filter(user=request.user).exists():
+            goal = Goal.objects.filter(user=request.user).get()
+            monthly_budget = goal.yearly_income / 12
+            for i in goal.goal:
+                # total budget for a category
+                category_data[i] = [round(int(goal.goal[i]) / 100 * monthly_budget, 2)] 
 
-    # category data
-    # category_data[i][0] == total budget for category
-    # category_data[i][1] == spent per category
-    # category_data[i][2] == Remaining per category
-    # category_data[i][3] == percent spent
-    context = { 
-        "expenses" : expenses,
-        "categories": categories,
-        "category_data": category_data
-    }
+        for exp in expenses:
+            if selected_month == months[exp.date_created.month - 1] + str(exp.date_created.year):
+                categories.add(exp.category)
+                spent_per_category[exp.category] = spent_per_category.get(exp.category, 0) + exp.value
+                total_spent += exp.value
+            expense_months.add(months[exp.date_created.month - 1] + str(exp.date_created.year))
+        
+        for i in spent_per_category:
+            if goal == None:
+                category_data[i].append('')
+                category_data[i].append(spent_per_category[i])
+                category_data[i].append('')
+                category_data[i].append('')
 
+            if goal != None:
+                category_data[i].append(spent_per_category[i])
+                category_data[i].append(round(category_data[i][0] - category_data[i][1], 2)) # remaining
+                category_data[i].append(round(category_data[i][1] / category_data[i][0] * 100, 2)) # percent spent
+            
+        context = { 
+            "expenses" : expenses,
+            "categories": categories,
+            "category_data": category_data,
+            "time_period_budget": round(monthly_budget, 2),
+            "total_spent": round(total_spent, 2),
+            "total_remaining": round(monthly_budget - total_spent, 2),
+            "expense_months": expense_months,
+            "selected_month": selected_month
+        }
     return render(request, 'budget/home.html', context)
 
+def monthSelector(request):
+    
+    if request.method == 'GET':
+        form = SelectMonthForm(request.GET)
+    if form.is_valid():
+        request.session['selected_month'] = form.cleaned_data['selected_month']
+        return redirect('budget:home')
+    else:
+        print("invalid form: ", form.errors)
 
+    return redirect('budget:home')
+
+    
