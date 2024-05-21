@@ -1,4 +1,4 @@
-<form class="m-0" action="{% url "budget:monthSelector" %}" method="GET">
+<form class="m-1 month-selector-form" action="{% url "budget:monthSelector" %}" method="GET">
   {% csrf_token %}
 
   <input type="hidden" id="selected-month" name="selected_month"/>
@@ -6,7 +6,7 @@
     <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
     {{selected_month}}
     </button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu month-dropdown-menu">
       {% for month in expense_months %}
         <li class="dropdown-item">
           <button class="month-button">{{month}}</button>

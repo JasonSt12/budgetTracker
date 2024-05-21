@@ -44,6 +44,14 @@ const dropdownButtons = document.querySelectorAll('.fa-angle-down')
 const collapseButtons = document.querySelectorAll('.fa-angle-up')
 const monthButtons = document.querySelectorAll('.month-button')
 const selectedMonth = document.getElementById('selected-month')
+const addExpenseButton = document.getElementById('add-expense-btn')
+const addExpenseContainer = document.querySelector('.add-expense-container')
+const closeAddExpense = document.getElementById('add-expense-X')
+const addCategoryButton = document.getElementById('add-category-btn')
+const categoryOptions = document.querySelectorAll('.category-option')
+const addCategoryDropdown = document.getElementById('add-category-dropdown')
+
+console.log(categoryOptions)
 
 let columnWidth = '0px'
 menuButton.addEventListener('click', function() {
@@ -87,5 +95,24 @@ for(let i = 0; i < monthButtons.length; i++) {
     monthButtons[i].addEventListener('click', function() {
         selectedMonth.value = monthButtons[i].textContent
         this.closest('form').submit()
+    })
+}
+
+addExpenseButton.addEventListener('click', function() {
+    addExpenseContainer.classList.toggle('hidden')
+})
+
+closeAddExpense.addEventListener('click', function() {
+    addExpenseContainer.classList.add('hidden')
+})
+
+addCategoryButton.addEventListener('click', function() {
+
+    addCategoryDropdown.textContent = this.previousElementSibling.value
+})
+
+for(let i = 0; i < categoryOptions.length; i++) {
+    categoryOptions[i].addEventListener('click', function() {
+        addCategoryDropdown.textContent = categoryOptions[i].textContent
     })
 }

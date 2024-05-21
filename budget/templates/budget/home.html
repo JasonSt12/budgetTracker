@@ -29,7 +29,13 @@
     </div>
 
     <div class="d-flex flex-column middle-column">
-      {% include 'budget/includes/monthSelector.html' %}
+      <div class="d-flex">
+        {% include 'budget/includes/monthSelector.html' %}
+        <button class="btn btn-secondary ms-auto m-1" id="add-expense-btn">Add Expense</button>
+      </div>
+      
+      {% include "budget/includes/addExpense.html" %}
+
 
       <ul class="list-group category-list">
         {% for key, value in category_data.items %}

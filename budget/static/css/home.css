@@ -69,7 +69,7 @@
     border: none;
 }
 
-.dropdown-menu {
+.month-dropdown-menu {
     max-height: 40vh;
     overflow-y: scroll;
 }
@@ -83,6 +83,41 @@
     height: 100%;
     width: 100%;
     background-color: inherit;
+}
+
+.add-expense-container {
+    
+    position: absolute;
+    z-index: 1;
+    top: 12%;
+    left: 54.7%;
+    height: 30vh;
+    width: 25vw;
+    background-color: white;
+    /* border: solid #000; */
+    border-radius: 8px;
+    /* border-width: 1px; */
+    box-shadow: 0 0 2px rgb(0,0,0);
+}
+
+.add-expense-header {
+    display: flex;
+    align-items: center;
+    height: 10%;
+    background-color: rgb(235, 242, 245);
+}
+
+#add-expense-X:hover {
+    cursor: pointer;
+}
+
+.fa-plus:hover {
+    cursor: pointer;
+}
+
+.add-category-dropdown-menu {
+    max-height: 30vh;
+    overflow-y: scroll;
 }
 
 .category-list {
