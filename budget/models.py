@@ -13,6 +13,6 @@ class Goal(models.Model):
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.FloatField()
-    category = models.CharField(max_length=20)
+    category = models.CharField(max_length=30)
     description = models.CharField(max_length=100)
     date_created = models.DateTimeField(auto_now_add=True)

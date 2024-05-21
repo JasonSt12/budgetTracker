@@ -4,7 +4,8 @@
       <i class="fa-solid fa-x ms-auto m-1" id="add-expense-X"></i> 
     </header> 
 
-    <form class="m-1">
+    <form class="m-1" action="{% url 'budget:addExpense' %}" method="POST">
+      {% csrf_token %}
       <div class="dropdown">
         <button class="btn dropdown-toggle" 
                 type="button" 
@@ -12,6 +13,8 @@
                 id="add-category-dropdown">
           Category
         </button>
+        <input type="hidden" name="category" id="selected-category"/>
+
           <ul class="dropdown-menu add-category-dropdown-menu">
 
             <div class="d-flex add-category-container m-2">
@@ -35,6 +38,6 @@
         <input type="text" class="form-control" name="description" placeholder="ex. Car Payment">
       </div>
 
-      <button class="btn btn-secondary">Submit</button>
+      <button class="btn btn-secondary" type="submit">Submit</button>
     </form>
   </div>

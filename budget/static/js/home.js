@@ -50,6 +50,7 @@ const closeAddExpense = document.getElementById('add-expense-X')
 const addCategoryButton = document.getElementById('add-category-btn')
 const categoryOptions = document.querySelectorAll('.category-option')
 const addCategoryDropdown = document.getElementById('add-category-dropdown')
+const selectedCategory = document.getElementById('selected-category')
 
 console.log(categoryOptions)
 
@@ -107,12 +108,14 @@ closeAddExpense.addEventListener('click', function() {
 })
 
 addCategoryButton.addEventListener('click', function() {
-
     addCategoryDropdown.textContent = this.previousElementSibling.value
+    selectedCategory.value = addCategoryDropdown.textContent
+
 })
 
 for(let i = 0; i < categoryOptions.length; i++) {
     categoryOptions[i].addEventListener('click', function() {
         addCategoryDropdown.textContent = categoryOptions[i].textContent
+        selectedCategory.value = addCategoryDropdown.textContent
     })
 }

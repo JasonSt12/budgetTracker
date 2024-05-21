@@ -11,3 +11,8 @@ class CreateAccountForm(forms.Form):
 
 class SelectMonthForm(forms.Form):
     selected_month = forms.CharField()
+
+class AddExpenseForm(forms.Form):
+    category = forms.CharField(max_length=30)
+    value = forms.FloatField()
+    description = forms.CharField(max_length=100)

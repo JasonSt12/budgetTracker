@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
-from budget.forms import LoginForm, CreateAccountForm, SelectMonthForm
+from budget.forms import LoginForm, CreateAccountForm, SelectMonthForm, AddExpenseForm
 
 def index(request):
     print("in index")
@@ -131,6 +131,27 @@ def monthSelector(request):
     else:
         print("invalid form: ", form.errors)
 
+    return redirect('budget:home')
+
+
+def addExpense(request):
+
+    if request.method =='GET':
+        print('get request')
+
+    if request.method == 'POST':
+        form = AddExpenseForm(request.POST)
+
+        if form.is_valid():
+            category = form.cleaned_data['category']
+            value = form.cleaned_data['value']
+            description = form.cleaned_data['description']
+
+            Expense.objects.create(user=request.user, value=value, 
+                                   category=category, description=description)
+
+        else:
+            print('invalid form: ', form.errors)
     return redirect('budget:home')
 
     
