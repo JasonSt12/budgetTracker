@@ -10,4 +10,5 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('monthSelector/', views.monthSelector, name='monthSelector'),
     path('addExpense/', views.addExpense, name='addExpense'),
+    path('deleteExpense/<int:expense_id>', views.deleteExpense, name='deleteExpense'),
 ]

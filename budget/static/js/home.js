@@ -51,8 +51,8 @@ const addCategoryButton = document.getElementById('add-category-btn')
 const categoryOptions = document.querySelectorAll('.category-option')
 const addCategoryDropdown = document.getElementById('add-category-dropdown')
 const selectedCategory = document.getElementById('selected-category')
+const deleteExpenseButtons = document.querySelectorAll('.fa-trash-can')
 
-console.log(categoryOptions)
 
 let columnWidth = '0px'
 menuButton.addEventListener('click', function() {
@@ -71,26 +71,71 @@ menuButton.addEventListener('click', function() {
     columnWidth = document.querySelector('.left-column').style.width
 })
 
+
+function openCategoryDropdown(buttonIndex) {
+    
+    const expenseList = dropdownButtons[buttonIndex].
+        parentElement.parentElement.nextElementSibling
+    const listItems = expenseList.children
+    // height of one epxense list item * number of list items
+    const listHeight = listItems[0].offsetHeight * listItems.length 
+
+    expenseList.style.height = listHeight
+    dropdownButtons[buttonIndex].classList.add('hidden')
+    collapseButtons[buttonIndex].classList.remove('hidden')
+}
+
+// Creates eventListener for close category dropdown button
+function closeCategoryDropdown(buttonIndex) {
+    
+    collapseButtons[buttonIndex].addEventListener('click', function() {
+        const expenseList = dropdownButtons[buttonIndex].
+            parentElement.parentElement.nextElementSibling
+
+        expenseList.style.height = '0'
+        dropdownButtons[buttonIndex].classList.remove('hidden')
+        collapseButtons[buttonIndex].classList.add('hidden')
+
+        const index = openCategories.indexOf(buttonIndex)
+        if(index > -1)
+            openCategories.splice(index, 1)
+        
+        localStorage.setItem('openCategories', openCategories)
+    })
+}
+
+function openDropdownsOnLoad() {
+
+    const toOpenString = localStorage.getItem('openCategories')
+    if(toOpenString) {
+        const toOpenArray = toOpenString.split(',')
+        toOpenArray.forEach((index) => {
+            openCategoryDropdown(index)
+            // allows you to close dropdowns that were opened on load
+            closeCategoryDropdown(index) 
+        })
+    }
+    
+}
+openDropdownsOnLoad()
+
+
+let openCategories = []
 for(let i = 0; i < dropdownButtons.length; i++) {
 
     dropdownButtons[i].addEventListener('click', function() {
-        const currentList = dropdownButtons[i].parentElement.
-                            parentElement.nextElementSibling
-        const listItems = currentList.children
-        const listHeight = listItems[0].offsetHeight * listItems.length
+       
+        openCategoryDropdown(i)
+        openCategories.push(i)
+        // store the opened categories in localStorage to be able to keep them open
+        // on page reload
+        localStorage.setItem('openCategories', openCategories)
 
-        currentList.style.height = listHeight
-        dropdownButtons[i].classList.add('hidden')
-        collapseButtons[i].classList.remove('hidden')
-
-        collapseButtons[i].addEventListener('click', function() {
-            currentList.style.height = '0'
-            dropdownButtons[i].classList.remove('hidden')
-            collapseButtons[i].classList.add('hidden')
-
-        }) 
+        // creates eventListener for closing dropdowns
+        closeCategoryDropdown(i)
     })
 }
+
 
 for(let i = 0; i < monthButtons.length; i++) {
     monthButtons[i].addEventListener('click', function() {

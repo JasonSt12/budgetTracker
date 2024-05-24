@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from budget.models import Expense, Goal
@@ -141,17 +141,34 @@ def addExpense(request):
 
     if request.method == 'POST':
         form = AddExpenseForm(request.POST)
-
+        goal = Goal.objects.filter(user=request.user).get()
+       
         if form.is_valid():
             category = form.cleaned_data['category']
             value = form.cleaned_data['value']
             description = form.cleaned_data['description']
 
+            if category not in goal.goal.keys():
+                goal.goal[category] = "-1"
+
+            goal.save()
             Expense.objects.create(user=request.user, value=value, 
                                    category=category, description=description)
 
         else:
             print('invalid form: ', form.errors)
+    return redirect('budget:home')
+
+
+def deleteExpense(request, expense_id):
+
+    if request.method == 'POST':
+        expense = get_object_or_404(Expense, id=expense_id)
+        # request.session['category'] = expense.category
+        expense.delete()
+
+        return redirect('budget:home')
+    
     return redirect('budget:home')
 
     

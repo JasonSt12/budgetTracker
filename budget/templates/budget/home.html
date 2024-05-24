@@ -36,6 +36,10 @@
       
       {% include "budget/includes/addExpense.html" %}
 
+      <div class="edit-expense-container">
+                      
+      </div>
+
       <ul class="list-group category-list">
         {% for key, value in category_data.items %}
           <li class="list-group-item">
@@ -53,7 +57,12 @@
               </div>
               <div class="ms-auto">
                 <p style="padding: 0px; margin: 0;">{{value.1}}</p>
-                <p style="font-size: 13px; padding: 0px; margin: 0;">{{value.0}}</p>
+                {% if value.0 > 0 %}
+                  <p style="font-size: 13px; padding: 0px; margin: 0;">{{value.0}}</p>
+                {% else %}
+                  <p style="font-size: 13px; padding: 0px; margin: 0;">N/A</p>
+                {% endif %}
+                
               </div>
             </div>
 
@@ -62,9 +71,17 @@
                 {% if key == expense.category %}
                   <li class="list-group-item individual-expense">
 
-                    <i class="fa-regular fa-pen-to-square"></i>
+                    <i class="fa-regular fa-pen-to-square me-1"></i>
+                    
                     {{expense.description}}: {{expense.value}}
-                    <i class="fa-regular fa-trash-can"></i>
+
+                    <form class="mb-0 ms-auto" action="{% url 'budget:deleteExpense' expense.id%}" method='POST'>
+                      {% csrf_token %}
+                      <button style="all: unset">
+                        <i class="fa-regular fa-trash-can"></i>
+                        <div class="hidden">{{expense.category}}</div>
+                      </button>                     
+                    </form> 
                     
                   </li>
                 {% endif %}

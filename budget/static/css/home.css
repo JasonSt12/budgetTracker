@@ -89,13 +89,16 @@
     
     position: absolute;
     z-index: 1;
-    top: 12%;
+    top: 102px;
     left: 54.7%;
     height: 30vh;
     width: 25vw;
+    min-width: 200px;
+    min-height: 250px;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 0 2px rgb(0,0,0);
+    overflow: hidden;
 }
 
 .add-expense-header {
@@ -151,11 +154,23 @@
 }
 
 .individual-expense {
+    display: flex;
+    align-items: center;
     border-bottom-width: 2px !important;
 }
 
+
 .fa-pen-to-square:hover {
     cursor: pointer;
+}
+
+.edit-expense-container {
+
+    background-color: red;
+    height: 30vh;
+    width: 25vw;
+    min-width: 200px;
+    min-height: 250px;
 }
 
 .fa-trash-can {
