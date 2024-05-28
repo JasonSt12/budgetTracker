@@ -16,4 +16,3 @@ class AddExpenseForm(forms.Form):
     category = forms.CharField(max_length=30)
     value = forms.FloatField()
     description = forms.CharField(max_length=100)
-

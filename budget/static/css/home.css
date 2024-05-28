@@ -1,145 +1,149 @@
-
 .main-container {
-    height: 100%;
-    transition: .5s;
+  height: 100%;
+  transition: 0.5s;
 }
 
 .left-column {
-    width: 0;
-    height: 100%;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #8697c4;
-    overflow-x: hidden;
-    transition: 0.5s;
-    flex: 0 0 auto;
+  width: 0;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #8697c4;
+  overflow-x: hidden;
+  transition: 0.5s;
+  flex: 0 0 auto;
 }
 
 .link-container {
-    height: 8%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .link-container:hover {
-    background-color: #5b6eb4;
+  background-color: #5b6eb4;
 }
 
 .logout-link {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 
 .fa-door-open {
-    color: white;
+  color: white;
 }
 
 .menu-link {
-    color: white;
-    text-decoration: none;
+  color: white;
+  text-decoration: none;
 }
 
 .menu-link:visited {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-.menu-link:hover{
-    text-decoration: none;
+.menu-link:hover {
+  text-decoration: none;
 }
 
 .menu-link:active {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #piechart {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .middle-column {
-    flex: 1;
-} 
+  flex: 1;
+}
 
 .dropdown-toggle {
-    border: none;
+  border: none;
 }
 
 .month-dropdown-menu {
-    max-height: 40vh;
-    overflow-y: scroll;
+  max-height: 40vh;
+  overflow-y: scroll;
 }
 
 .dropdown-item:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .month-button {
-    border: none;
-    height: 100%;
-    width: 100%;
-    background-color: inherit;
+  border: none;
+  height: 100%;
+  width: 100%;
+  background-color: inherit;
 }
 
 .add-expense-container {
-    
-    position: absolute;
-    z-index: 1;
-    top: 102px;
-    left: 54.7%;
-    height: 30vh;
-    width: 25vw;
-    min-width: 200px;
-    min-height: 250px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 2px rgb(0,0,0);
-    overflow: hidden;
+  position: absolute;
+  z-index: 1;
+  top: 102px;
+  left: 54.7%;
+  height: 30vh;
+  width: 25vw;
+  min-width: 200px;
+  min-height: 250px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 2px rgb(0, 0, 0);
+  overflow: hidden;
 }
 
 .add-expense-header {
-    display: flex;
-    align-items: center;
-    height: 10%;
-    background-color: rgb(235, 242, 245);
+  display: flex;
+  align-items: center;
+  height: 10%;
+  background-color: rgb(235, 242, 245);
 }
 
 #add-expense-X:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .fa-plus:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .add-category-dropdown-menu {
-    max-height: 30vh;
-    overflow-y: scroll;
+  max-height: 25vh;
+  overflow-y: scroll;
 }
 
 .category-list {
-    width: 100%
+  width: 100%;
 }
 
 .fa-angle-down:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .fa-angle-up:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .category-label-container {
-    width: 80%;
+  width: 80%;
 }
 
 .progress {
-    width: 100%;
-    height: 10px;
+  width: 100%;
+  height: 10px;
+}
+
+.category-data {
+  padding: 0;
+  margin: 0;
+  text-align: right;
 }
 
 /* .progress-bar {
@@ -147,51 +151,61 @@
 } */
 
 .expense-list {
-    height: 0;
-    overflow-y: hidden;
-    transition: .2s;
-    border-radius: none;
+  height: 0;
+  overflow-y: hidden;
+  transition: 0.2s;
+  border-radius: none;
 }
 
 .individual-expense {
-    display: flex;
-    align-items: center;
-    border-bottom-width: 2px !important;
+  display: flex;
+  align-items: center;
+  border-bottom-width: 2px !important;
 }
-
 
 .fa-pen-to-square:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.edit-expense-container {
+.edit-expense-form {
+  display: flex;
+  margin-bottom: 0;
+  align-items: center;
+}
 
-    background-color: red;
-    height: 30vh;
-    width: 25vw;
-    min-width: 200px;
-    min-height: 250px;
+.fa-check {
+  color: green;
+}
+
+.fa-check:hover {
+  cursor: pointer;
 }
 
 .fa-trash-can {
-    color: red;
-    float: right;
+  color: red;
+  float: right;
 }
 
 .fa-trash-can:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .right-column {
-    width: 20vw;
-    background-color: #ede8f5;
-    flex: 0 0 auto;
+  width: 20vw;
+  background-color: #ede8f5;
+  flex: 0 0 auto;
 }
 
 .current-stats-list {
-    background-color: #ede8f5 !important;
+  background-color: #ede8f5 !important;
+}
+
+.chart-container {
+  height: 30%;
+  width: 100%;
+  /* margin-top: 1rem; */
 }
 
 .hidden {
-    display: none !important;
+  display: none !important;
 }

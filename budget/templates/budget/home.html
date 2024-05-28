@@ -3,7 +3,9 @@
 <!DOCTYPE html>
 {% block head %}
   {% load static %}
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+  </script>
   <link rel="stylesheet" href="/static/css/home.css?{% now "U" %}" />
 {% endblock head %}
 
@@ -31,14 +33,10 @@
     <div class="d-flex flex-column middle-column">
       <div class="d-flex">
         {% include 'budget/includes/monthSelector.html' %}
-        <button class="btn btn-secondary ms-auto m-1" id="add-expense-btn">Add Expense</button>
+        <button class="btn btn-outline-secondary ms-auto m-1" id="add-expense-btn">Add Expense</button>
       </div>
       
       {% include "budget/includes/addExpense.html" %}
-
-      <div class="edit-expense-container">
-                      
-      </div>
 
       <ul class="list-group category-list">
         {% for key, value in category_data.items %}
@@ -55,14 +53,18 @@
                   <div class="progress-bar" style="width: {{value.3}}%"></div>
                 </div>
               </div>
-              <div class="ms-auto">
-                <p style="padding: 0px; margin: 0;">{{value.1}}</p>
-                {% if value.0 > 0 %}
-                  <p style="font-size: 13px; padding: 0px; margin: 0;">{{value.0}}</p>
+              <div class="ms-auto" style="width: 15%">
+                {% if value.1 > 0 %}
+                  <p class="category-data">{{value.1}}</p>
                 {% else %}
-                  <p style="font-size: 13px; padding: 0px; margin: 0;">N/A</p>
+                  <p class="category-data">0</p>
                 {% endif %}
                 
+                {% if value.0 > 0 %}
+                  <p class="category-data" style="font-size: 13px">{{value.0}}</p>
+                {% else %}
+                  <p class="category-data" style="font-size: 13px">N/A</p>
+                {% endif %}
               </div>
             </div>
 
@@ -72,14 +74,33 @@
                   <li class="list-group-item individual-expense">
 
                     <i class="fa-regular fa-pen-to-square me-1"></i>
-                    
-                    {{expense.description}}: {{expense.value}}
+                    <i class="fa-solid fa-check m-1 hidden"></i>
+                    <div class="expense-data">
+                      {{expense.description}}: {{expense.value}}
+                    </div>
+
+                    <form class="edit-expense-form hidden" 
+                          action="{% url 'budget:editExpense' expense.id%}" 
+                          method="POST">
+                      {% csrf_token %}
+                      
+                      <input type="hidden" name="category" value="{{expense.category}}" />
+                      <input class="form-control me-1" 
+                             name="description" 
+                             placeholder="{{expense.description}}"
+                             value="{{expense.description}}"/>
+                      <p class="mb-0">:</p>
+                      <input class="form-control ms-1" 
+                             name="value" 
+                             placeholder="{{expense.value}}"
+                             value="{{expense.value}}"/>
+                    </form>
 
                     <form class="mb-0 ms-auto" action="{% url 'budget:deleteExpense' expense.id%}" method='POST'>
                       {% csrf_token %}
                       <button style="all: unset">
                         <i class="fa-regular fa-trash-can"></i>
-                        <div class="hidden">{{expense.category}}</div>
+                        {% comment %} <div class="hidden">{{expense.category}}</div> {% endcomment %}
                       </button>                     
                     </form> 
                     
@@ -97,16 +118,30 @@
 
       <div class="d-flex flex-column align-items-center">
         <div class="mt-2">
-          <h3>${{total_spent}}</h3>
+          <h3 id="total-spent">{{total_spent}}</h3>
         </div>
-        <div><h3>Spent</h3></div>
+        <div>
+          <h4>Spent</h4>
+        </div>
         <hr class="border border-secondary border-1 mt-2" style="width: 80%">
-        <div><h3>${{total_remaining}}</h3></div>
-        <div><h3>Remaining</h3></div>
+        <div>
+          <h3 id="total-remaining">{{total_remaining}}</h3>
+        </div>
+        <div>
+          <h4>Remaining</h4>
+        </div>
         <hr class="border border-secondary border-1 mt-2" style="width: 80%">
-        <div><h3>${{ time_period_budget }}</h3></div>
-        <div><h3>Total Budget</h3></div>
+        <div>
+          <h3>{{ time_period_budget }}</h3>
+        </div>
+        <div>
+          <h4>Total Budget</h4>
+        </div>
         <hr class="border border-secondary border-1 mt-2" style="width: 80%">
+      </div>
+
+      <div class="chart-container">
+        <canvas id="spent-remaining-chart"></canvas>
       </div>
 
     </div>

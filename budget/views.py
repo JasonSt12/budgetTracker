@@ -74,7 +74,7 @@ def home(request):
     if Expense.objects.filter(user=request.user).exists():
         expenses = Expense.objects.filter(user=request.user).all()
         goal = None
-        categories, expense_months = set(), set()
+        expense_months = set()
         category_data, spent_per_category = dict(), dict()
         total_spent = 0
         months = ["Jan, ", "Feb, ", "Mar, ", "Apr, ", "May, ", "Jun, ", 
@@ -92,7 +92,6 @@ def home(request):
 
         for exp in expenses:
             if selected_month == months[exp.date_created.month - 1] + str(exp.date_created.year):
-                categories.add(exp.category)
                 spent_per_category[exp.category] = spent_per_category.get(exp.category, 0) + exp.value
                 total_spent += exp.value
             expense_months.add(months[exp.date_created.month - 1] + str(exp.date_created.year))
@@ -111,7 +110,6 @@ def home(request):
             
         context = { 
             "expenses" : expenses,
-            "categories": categories,
             "category_data": category_data,
             "time_period_budget": round(monthly_budget, 2),
             "total_spent": round(total_spent, 2),
@@ -119,6 +117,8 @@ def home(request):
             "expense_months": expense_months,
             "selected_month": selected_month
         }
+
+        print(category_data.keys())
     return render(request, 'budget/home.html', context)
 
 def monthSelector(request):
@@ -169,6 +169,24 @@ def deleteExpense(request, expense_id):
 
         return redirect('budget:home')
     
+    return redirect('budget:home')
+
+
+def editExpense(request, expense_id):
+
+    if request.method == 'POST':
+        form = AddExpenseForm(request.POST)
+
+        if form.is_valid():
+            expense = get_object_or_404(Expense, id=expense_id)
+            expense.value = form.cleaned_data['value']
+            expense.description = form.cleaned_data['description']      
+            expense.save()
+        else:
+            print("Invalid form:", form.errors)
+
+        return redirect('budget:home')
+
     return redirect('budget:home')
 
     
