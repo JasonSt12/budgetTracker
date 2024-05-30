@@ -16,17 +16,6 @@
   flex: 0 0 auto;
 }
 
-.link-container {
-  height: 8%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.link-container:hover {
-  background-color: #5b6eb4;
-}
-
 .logout-link {
   position: absolute;
   bottom: 0;
@@ -39,6 +28,10 @@
 }
 
 .menu-link {
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
   text-decoration: none;
 }
@@ -49,6 +42,7 @@
 
 .menu-link:hover {
   text-decoration: none;
+  background-color: #5b6eb4;
 }
 
 .menu-link:active {
@@ -203,7 +197,6 @@
 .chart-container {
   height: 30%;
   width: 100%;
-  /* margin-top: 1rem; */
 }
 
 .hidden {

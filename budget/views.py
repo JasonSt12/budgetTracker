@@ -189,4 +189,8 @@ def editExpense(request, expense_id):
 
     return redirect('budget:home')
 
+def goal(request):
+
+    return render(request, 'budget/goal.html')
+
     

@@ -1,0 +1,24 @@
+  <div class="d-flex flex-column left-column">
+      <a href="{% url 'budget:goal' %}" class="menu-link">Goal</a>
+      <a class="menu-link">Link2</a>
+      <a class="menu-link">Link3</a>
+
+      
+      <a class="menu-link logout-link" href="{% url 'budget:logout' %}">
+        <i class="fa-solid fa-door-open me-2"></i> Logout
+      </a>
+    {% comment %} <div class="link-container">
+      <a href="{% url 'budget:goal' %}" class="menu-link">Goal</a>
+    </div>
+    <div class="link-container">
+      <a class="menu-link">Link2</a>
+    </div>
+    <div class="link-container">
+      <a class="menu-link">Link3</a>
+    </div>
+
+    <div class="link-container logout-link">
+      <i class="fa-solid fa-door-open me-2"></i>
+      <a class="menu-link" href="{% url 'budget:logout' %}">Logout</a>
+    </div> {% endcomment %}
+  </div>

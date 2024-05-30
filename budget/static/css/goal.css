@@ -1,0 +1,76 @@
+.main-container {
+  height: 100%;
+  transition: 0.5s;
+}
+
+.left-column {
+  width: 0;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #8697c4;
+  overflow-x: hidden;
+  transition: 0.5s;
+  flex: 0 0 auto;
+}
+
+.logout-link {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.fa-door-open {
+  color: white;
+}
+
+.menu-link {
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+}
+
+.menu-link:visited {
+  text-decoration: none;
+}
+
+.menu-link:hover {
+  text-decoration: none;
+  background-color: #5b6eb4;
+}
+
+.menu-link:active {
+  text-decoration: none;
+}
+
+.input-column {
+  width: 30%;
+}
+
+.chart-column {
+  flex: 1;
+}
+
+.chart-container {
+  height: 90%;
+}
+
+.right-column {
+  width: 20vw;
+  height: 100%;
+  background-color: #ede8f5;
+  flex: 0 0 auto;
+}
+
+.goal-container {
+  height: 12%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

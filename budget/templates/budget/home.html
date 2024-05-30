@@ -1,4 +1,3 @@
-<!-- display data of current time period-->
 {% extends "budget/base.html" %}
 <!DOCTYPE html>
 {% block head %}
@@ -13,30 +12,75 @@
 
   <div class="d-flex main-container">
 
-    <div class="d-flex flex-column left-column">
-      <div class="link-container">
-        <a class="menu-link">Link1</a>
-      </div>
-      <div class="link-container">
-        <a class="menu-link">Link2</a>
-      </div>
-      <div class="link-container">
-        <a class="menu-link">Link3</a>
-      </div>
-
-      <div class="link-container logout-link">
-        <i class="fa-solid fa-door-open me-2"></i>
-        <a class="menu-link" href="{% url 'budget:logout' %}">Logout</a>
-      </div>
-    </div>
+    {% include "budget/includes/menu.html" %}
 
     <div class="d-flex flex-column middle-column">
       <div class="d-flex">
-        {% include 'budget/includes/monthSelector.html' %}
+        <form class="m-1 month-selector-form" action="{% url "budget:monthSelector" %}" method="GET">
+          {% csrf_token %}
+        
+          <input type="hidden" id="selected-month" name="selected_month"/>
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            {{selected_month}}
+            </button>
+            <ul class="dropdown-menu month-dropdown-menu">
+              {% for month in expense_months %}
+                <li class="dropdown-item">
+                  <button class="month-button">{{month}}</button>
+                </li>
+                
+              {% endfor %}
+            </ul>
+          </div>
+        
+        </form>
         <button class="btn btn-outline-secondary ms-auto m-1" id="add-expense-btn">Add Expense</button>
       </div>
       
-      {% include "budget/includes/addExpense.html" %}
+      <div class="add-expense-container hidden">
+        <header class="add-expense-header">
+          <div class="m-1">Add New Expense</div>
+          <i class="fa-solid fa-x ms-auto m-1" id="add-expense-X"></i> 
+        </header> 
+    
+        <form class="m-1" action="{% url 'budget:addExpense' %}" method="POST">
+          {% csrf_token %}
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" 
+                    type="button" 
+                    data-bs-toggle="dropdown"
+                    id="add-category-dropdown">
+              Category
+            </button>
+            <input type="hidden" name="category" id="selected-category"/>
+    
+              <ul class="dropdown-menu add-category-dropdown-menu">
+    
+                <div class="d-flex add-category-container m-2">
+                  <input class="form-control" name="new-category" placeholder="New Category"/>
+                  <i class="fa-solid fa-plus ms-2 mt-auto mb-auto" id="add-category-btn"></i>
+                </div>     
+    
+                {% for category in category_data %}
+                  <li class="dropdown-item category-option">{{category}}</li>
+                {% endfor %}   
+              </ul> 
+          </div>
+    
+          <div class="input-group mb-3">
+            <span class="input-group-text">Value</span>
+            <input type="text" class="form-control" name="value" placeholder="ex. 250">
+          </div>
+    
+          <div class="input-group mb-3">
+            <span class="input-group-text">Description</span>
+            <input type="text" class="form-control" name="description" placeholder="ex. Car Payment">
+          </div>
+    
+          <button class="btn btn-secondary" type="submit">Submit</button>
+        </form>
+      </div>
 
       <ul class="list-group category-list">
         {% for key, value in category_data.items %}

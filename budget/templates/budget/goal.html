@@ -1,0 +1,55 @@
+{% extends "budget/base.html" %}
+
+<!DOCTYPE html>
+{% block head %}
+  {% load static %}
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+  </script>
+  <link rel="stylesheet" href="/static/css/goal.css?{% now "U" %}" />
+{% endblock head %}
+
+
+{% block content %}
+
+  <div class="d-flex main-container">
+    
+    {% include "budget/includes/menu.html" %}
+
+    <div class="input-column m-2">
+      <form>
+        <div class="input-group">
+          <span class="input-group-text">Monthly Budget</span>
+          <input class="form-control" type="text"/>
+        </div>
+
+        <div class="input-group">
+          <button class="btn btn-outline-secondary" type="button">Add</button>
+          <input class="form-control" type="text" placeholder="category"/>
+          <div class="col-2">
+            <input class="form-control" type="text"/>
+          </div> 
+          
+          <span class="input-group-text">%</span>
+        </div>
+
+
+      </form>
+    </div>
+
+    <div class="d-flex flex-column chart-column">
+
+      <div class="chart-container m-2">
+        <canvas id="goal-chart"></canvas>
+      </div>
+
+    </div>
+
+    <div class="d-flex flex-column ms-auto right-column">
+
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/static/js/goal.js?{% now "U" %}"></script>
+{% endblock content %}
+
