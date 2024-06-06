@@ -16,3 +16,10 @@ class AddExpenseForm(forms.Form):
     category = forms.CharField(max_length=30)
     value = forms.FloatField()
     description = forms.CharField(max_length=100)
+
+class CreateGoalForm(forms.Form):
+    monthly_budget = forms.IntegerField()
+    new_goal_values = forms.JSONField()
+    goal_name = forms.CharField()
+    active_month = forms.CharField()
+    active_year = forms.IntegerField()

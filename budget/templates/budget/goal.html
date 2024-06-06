@@ -7,6 +7,10 @@
     src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
   </script>
   <link rel="stylesheet" href="/static/css/goal.css?{% now "U" %}" />
+
+  <script src="https://d3js.org/d3-color.v1.min.js"></script>
+  <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 {% endblock head %}
 
 
@@ -17,35 +21,101 @@
     {% include "budget/includes/menu.html" %}
 
     <div class="input-column m-2">
-      <form>
-        <div class="input-group">
+      <form action="{% url 'budget:createGoal'%}" method="POST">
+        {% csrf_token %}
+        <div class="input-group mb-2">
           <span class="input-group-text">Monthly Budget</span>
-          <input class="form-control" type="text"/>
+          <input class="form-control" id="monthly-budget" name="monthly_budget" type="text"/>
         </div>
 
-        <div class="input-group">
-          <button class="btn btn-outline-secondary" type="button">Add</button>
-          <input class="form-control" type="text" placeholder="category"/>
+        <div class="input-group mb-3">
+          <button class="btn btn-outline-secondary" id="add-category-btn" type="button">Add</button>
+          <input type="text" class="form-control" id="new-category" placeholder="Category"/>
           <div class="col-2">
-            <input class="form-control" type="text"/>
+            <input type="text" class="form-control" id="new-category-percent" placeholder="%"/>
           </div> 
-          
-          <span class="input-group-text">%</span>
         </div>
 
+        <div class="category-list-container" >
+          {% comment %} <div class="category-list-item">
+            <div>Food 10%</div>
+            <i class="fa-solid fa-x"></i>
+          </div> {% endcomment %}
+        </div>
+      
+        
+        <p class="text-danger" id="error-message"></p>
 
+        <div class="d-flex align-items-center">
+          Active Month:
+          
+          <div class="dropdown ms-1 me-1">
+            <button class="btn btn-outline-secondary dropdown-toggle" 
+                    type="button" 
+                    data-bs-toggle="dropdown"
+                    id="month-dropdown-button">
+              Month
+            </button>
+            
+            <ul class="dropdown-menu active-month-selector">
+              <li><a class="dropdown-item month-dropdown-item" href="#">January</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">February</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">March</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">April</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">May</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">June</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">July</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">August</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">September</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">October</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">November</a></li>
+              <li><a class="dropdown-item month-dropdown-item" href="#">December</a></li>
+            </ul>
+          </div>
+
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    id="year-dropdown-button">
+              Year
+            </button>
+
+            <ul class="dropdown-menu active-month-selector" id="year-selector">
+              {% comment %} <li><a class="dropdown-item" href="#">2024</a></li> {% endcomment %}
+            </ul>
+          </div>
+            
+        </div>
+        <div class="d-flex mt-2">
+          <button class="btn btn-secondary" type="button" id="set-goal-btn">Set Goal</button>
+          <input class="form-control ms-1 goal-name" name="goal_name" placeholder="Goal Name"/>
+        </div>
+
+        <input type="hidden" name="new_goal_values" id="new-goal-values"/>
+        <input type="hidden" name="active_month" id="active-month-input"/>
+        <input type="hidden" name="active_year" id="active-year-input"/>
       </form>
+
     </div>
 
     <div class="d-flex flex-column chart-column">
-
       <div class="chart-container m-2">
         <canvas id="goal-chart"></canvas>
       </div>
-
     </div>
 
-    <div class="d-flex flex-column ms-auto right-column">
+    <div class="d-flex flex-column ms-auto m-2 right-column">
+
+      {% for goal in goals %}
+      
+        <div class="goal-container">
+          <div>{{goal.goal_name}}</div>
+          <div class="existing-goal-values hidden">{{goal.goal}}</div>
+          <div class="existing-goal-activeMonth hidden">{{goal.activeFor}}</div>
+        </div>
+      
+      {% endfor %}
 
     </div>
   </div>
