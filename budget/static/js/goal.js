@@ -10,7 +10,7 @@ const categoryListContainer = document.querySelector(
   ".category-list-container"
 );
 const newGoalValuesInput = document.getElementById("new-goal-values");
-const monthlyBudget = document.getElementById("monthly-budget");
+
 const goalNameInput = document.querySelector(".goal-name");
 const setGoalBtn = document.getElementById("set-goal-btn");
 const errorMesage = document.getElementById("error-message");
@@ -20,6 +20,19 @@ const existingGoalValues = document.querySelectorAll(".existing-goal-values");
 const existingGoalActiveMonths = document.querySelectorAll(
   ".existing-goal-activeMonth"
 );
+const goalDropdownContainers = document.querySelectorAll(
+  ".goal-dropdown-container"
+);
+const goalDropdownButtons = document.querySelectorAll(".fa-angle-down");
+const goalCollapseButtons = document.querySelectorAll(".fa-angle-up");
+const goalEditButtons = document.querySelectorAll(".fa-pen-to-square");
+
+const DOM = {};
+DOM["existingMonthlyBudgets"] = document.querySelectorAll(
+  ".existing-goal-monthlyBudget"
+);
+
+DOM["existingGoalNames"] = document.querySelectorAll(".existing-goal-name");
 
 let newGoalValues = {};
 
@@ -47,7 +60,7 @@ newCategoryButton.addEventListener("click", function () {
     const categoryListItem = `
   <div class="category-list-item">
     <div>${newCategoryInput.value} ${newCategoryPercent.value}%</div>
-    <i class="fa-solid fa-x"></i>
+    <i class="fa-solid fa-x delete-new-category"></i>
   </div>`;
 
     categoryListContainer.insertAdjacentHTML("beforeend", categoryListItem);
@@ -64,7 +77,7 @@ const currentYear = new Date().getFullYear();
 for (let i = currentYear; i >= 2000; i--) {
   yearSelector.insertAdjacentHTML(
     "beforeend",
-    `<li><a class="dropdown-item year-dropdown-item" href="#">${i}</a></li>`
+    `<li><a class="dropdown-item year-dropdown-item">${i}</a></li>`
   );
 }
 
@@ -91,9 +104,11 @@ for (let i = 0; i < yearDropdownItems.length; i++) {
 // delcared inside the inputColumn event listener since categories are added
 // dynamically
 inputColumn.addEventListener("click", function () {
-  const deleteCategoryButtons = document.querySelectorAll(".fa-x");
-  for (let i = 0; i < deleteCategoryButtons.length; i++) {
-    deleteCategoryButtons[i].addEventListener("click", function () {
+  const deleteNewCategoryButtons = document.querySelectorAll(
+    ".delete-new-category"
+  );
+  for (let i = 0; i < deleteNewCategoryButtons.length; i++) {
+    deleteNewCategoryButtons[i].addEventListener("click", function () {
       let deletedCat = this.previousElementSibling.textContent;
       deletedCat = deletedCat.substring(0, deletedCat.length - 1);
 
@@ -111,7 +126,6 @@ function checkMonthDuplicates() {
   const selectedMonthYear = selectedMonth + " " + selectedYear;
 
   for (let i = 0; i < existingGoalActiveMonths.length; i++) {
-    console.log(existingGoalActiveMonths[i].textContent);
     if (existingGoalActiveMonths[i].textContent === selectedMonthYear) {
       return true;
     }
@@ -121,13 +135,12 @@ function checkMonthDuplicates() {
 
 setGoalBtn.addEventListener("click", function () {
   newGoalValuesInput.value = JSON.stringify(newGoalValues);
+  const monthlyBudget = document.getElementById("monthly-budget");
 
   let categoryPercentSum = 0;
   for (let key in newGoalValues) {
     categoryPercentSum += Number(newGoalValues[key]);
   }
-
-  console.log("categoryPercentSum = ", categoryPercentSum);
 
   if (categoryPercentSum !== 100) {
     errorMesage.textContent = "Percentages Do Not Add Up To 100";
@@ -144,6 +157,66 @@ setGoalBtn.addEventListener("click", function () {
   }
 });
 
+for (let i = 0; i < goalDropdownButtons.length; i++) {
+  goalDropdownButtons[i].addEventListener("click", function () {
+    goalDropdownContainers[i].style.height = "20vh";
+    goalDropdownContainers[i].style.overflow = "scroll";
+    goalCollapseButtons[i].classList.remove("hidden");
+    goalDropdownButtons[i].classList.add("hidden");
+  });
+}
+
+for (let i = 0; i < goalCollapseButtons.length; i++) {
+  goalCollapseButtons[i].addEventListener("click", function () {
+    goalDropdownContainers[i].style.height = "0";
+    goalDropdownContainers[i].style.overflow = "hidden";
+    goalCollapseButtons[i].classList.add("hidden");
+    goalDropdownButtons[i].classList.remove("hidden");
+  });
+}
+
+for (let i = 0; i < goalDropdownContainers.length; i++) {
+  const goalData = JSON.parse(existingGoalValues[i].textContent);
+
+  for (key in goalData) {
+    let html = `<div>${key}: ${goalData[key]}</div>`;
+    goalDropdownContainers[i].insertAdjacentHTML("beforeend", html);
+  }
+}
+
+for (let i = 0; i < goalEditButtons.length; i++) {
+  goalEditButtons[i].addEventListener("click", function () {
+    const goalData = JSON.parse(existingGoalValues[i].textContent);
+
+    for (key in goalData) {
+      const categoryListItem = `
+        <div class="category-list-item">
+          <div class="d-flex align-items-center">
+            <input class="form-control me-1 mb-1" type="text" value="${key}"/>
+            <input class="form-control mb-1" type="text" value="${goalData[key]}"/>
+          </div>
+          <i class="fa-solid fa-x ms-2 delete-existing-category"></i>
+        </div>`;
+
+      document
+        .querySelector(".category-list-container-edit")
+        .insertAdjacentHTML("beforeend", categoryListItem);
+    }
+
+    document.getElementById("monthly-budget-edit").value =
+      DOM.existingMonthlyBudgets[i].textContent;
+
+    document.getElementById("goal-name-edit").value =
+      DOM.existingGoalNames[i].textContent;
+
+    document.getElementById("create-goal-form").classList.add("hidden");
+    document.getElementById("edit-goal-form").classList.remove("hidden");
+  });
+}
+
+//
+// Chart code below
+//
 let chartLabels = [];
 let charValues = [];
 function setChartData() {
@@ -167,7 +240,12 @@ function setChartData() {
 
   for (let i = 0; i < existingGoalActiveMonths.length; i++) {
     if (existingGoalActiveMonths[i].textContent === currentMonthYear) {
-      console.log(existingGoalValues[i].textContent);
+      const currentGoal = JSON.parse(existingGoalValues[i].textContent);
+
+      for (key in currentGoal) {
+        chartLabels.push(key);
+        charValues.push(currentGoal[key]);
+      }
     }
   }
 }
@@ -183,7 +261,7 @@ function calculatePoint(i, intervalSize, colorInfo) {
 function createColorArray(numOfDataPoints, colorScale, colorInfo) {
   var { colorStart, colorEnd } = colorInfo;
   var colorRange = colorEnd - colorStart;
-  var intervalSize = colorRange / dataLength;
+  var intervalSize = colorRange / numOfDataPoints;
 
   var colorPoint;
   var colorArray = [];
@@ -196,14 +274,24 @@ function createColorArray(numOfDataPoints, colorScale, colorInfo) {
   return colorArray;
 }
 
+const colorScale = d3.interpolateCool;
+
+const colorInfo = {
+  colorStart: 0,
+  colorEnd: 0.65,
+  useEndAsStart: false,
+};
+
+let colors = createColorArray(charValues.length, colorScale, colorInfo);
+
 const chart = new Chart("goal-chart", {
   type: "doughnut",
   data: {
-    labels: ["Spent", "Unallocated"],
+    labels: chartLabels,
     datasets: [
       {
-        backgroundColor: ["#53b5e7", "#3d52a0"],
-        data: [10, 20],
+        backgroundColor: colors,
+        data: charValues,
       },
     ],
   },
@@ -212,11 +300,3 @@ const chart = new Chart("goal-chart", {
     maintainAspectRatio: false,
   },
 });
-
-const colorScale = d3.interpolateCool;
-
-const colorInfo = {
-  colorStart: 0,
-  colorEnd: 0.65,
-  useEndAsStart: false,
-};

@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from budget.forms import LoginForm, CreateAccountForm, SelectMonthForm, AddExpenseForm, CreateGoalForm
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 def index(request):
     if request.user.is_authenticated:
@@ -76,12 +78,12 @@ def home(request):
         expense_months = set()
         category_data, spent_per_category = dict(), dict()
         total_spent, monthly_budget = 0, 0
-        months = ["Jan, ", "Feb, ", "Mar, ", "Apr, ", "May, ", "Jun, ", 
-                  "Jul, ", "Aug, ", "Sep, ", "Oct, ", "Nov, ", "Dec, "]
+        months = ["January ", "February ", "March ", "April ", "May ", "June ", 
+                  "July ", "August ", "September ", "October ", "November ", "December "]
         selected_month = months[date.today().month - 1] + str(date.today().year)
         if request.session.get('selected_month'):
             selected_month = request.session.get('selected_month')
-    
+
         if Goal.objects.filter(user=request.user).exists():
             goal = Goal.objects.get(pk=2)
             # goal = Goal.objects.filter(user=request.user).get()
@@ -206,14 +208,23 @@ def editExpense(request, expense_id):
 def goal(request):
 
     context = dict()
+    months = ["January ", "February ", "March ", "April ", "May ", "June ", 
+              "July ", "August ", "September ", "October ", "November ", "December "]
+    selected_month = months[date.today().month - 1] + str(date.today().year)
+
     if Goal.objects.filter(user=request.user).exists():
         goals = Goal.objects.filter(user=request.user)
-
-        for i in goals:
-            print(i.goal_name)
+        current_goal = ""
+        
+        for goal in goals:
+            # convert to javascript JSON string format
+            goal.goal = json.dumps(goal.goal)
+            if goal.activeFor == selected_month:
+                current_goal = goal
 
         context = {
             'goals': goals,
+            'current_goal': current_goal,
         }
 
     return render(request, 'budget/goal.html', context)
