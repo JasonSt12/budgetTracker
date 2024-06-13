@@ -25,14 +25,14 @@
         {% csrf_token %}
         <div class="input-group mb-2">
           <span class="input-group-text">Monthly Budget</span>
-          <input class="form-control" id="monthly-budget" name="monthly_budget" type="text"/>
+          <input class="form-control" id="monthly-budget" name="monthly_budget" type="number"/>
         </div>
 
         <div class="input-group mb-3">
           <button class="btn btn-outline-secondary" id="add-category-btn" type="button">Add</button>
           <input type="text" class="form-control" id="new-category" placeholder="Category"/>
           <div class="col-2">
-            <input type="text" class="form-control" id="new-category-percent" placeholder="%"/>
+            <input type="number" class="form-control" id="new-category-percent" placeholder="%"/>
           </div> 
         </div>
 
@@ -97,30 +97,39 @@
         <input type="hidden" name="active_year" id="active-year-input"/>
       </form>
 
-      <form class="hidden" id="edit-goal-form">
+      {% comment %} Edit Goal Form {% endcomment %}
+      <form class="hidden" action="{% url 'budget:updateGoal' %}" method="POST" id="edit-goal-form">
         {% csrf_token %}
         <div class="input-group mb-2">
           <span class="input-group-text">Monthly Budget</span>
-          <input class="form-control" id="monthly-budget-edit" name="monthly_budget" type="text"/>
+          <input class="form-control" id="monthly-budget-edit" name="monthly_budget" type="number"/>
         </div>
 
         <div class="input-group mb-3">
           <button class="btn btn-outline-secondary" id="add-category-btn-edit" type="button">Add</button>
           <input type="text" class="form-control" id="new-category-edit" placeholder="Category"/>
           <div class="col-2">
-            <input type="text" class="form-control" id="new-category-percent-edit" placeholder="%"/>
+            <input type="number" class="form-control" id="new-category-percent-edit" placeholder="%"/>
           </div> 
         </div>
-
+        <div class="" id="info-message"></div>
         <div class="category-list-container-edit">
 
         </div>
 
+        <p class="text-danger" id="error-message-edit"></p>
+        <div class="d-flex">
+          <p>Active Month:&nbsp;</p>
+          <p id="active-month-edit"></p>
+        </div>
         <div class="d-flex mt-2">
-          <button class="btn btn-secondary" type="button" id="update-goal-btn">Update Goal</button>
+          <button class="btn btn-secondary" type="button" id="save-updates-btn">Save</button>
           <input class="form-control ms-1 goal-name" id="goal-name-edit" name="goal_name" placeholder="Goal Name"/>
         </div>
 
+        <input type="hidden" name="goal_values" id="updated-goal-values"/>
+        <input type="hidden" name="active_for" id="updated-active-month"/>
+        <input type="hidden" name="goal_id" id="updated-goal-id"/>
       </form>
 
     </div>
@@ -134,9 +143,10 @@
     <div class="d-flex flex-column ms-auto m-2 right-column">
 
       <p class="ms-auto me-auto">Current Goal</p>
-      <div class="goal-container">
+      <div class="ms-auto me-auto goal-container">
         <div>{{current_goal.goal_name}}</div>
       </div>
+      
 
       <p class="ms-auto me-auto">All Goals</p>
       <ul class="list-group list-group-flush">
@@ -162,6 +172,7 @@
           <div class="existing-goal-monthlyBudget hidden">{{goal.monthly_budget}}</div>
           <div class="existing-goal-name hidden">{{goal.goal_name}}</div>
           <div class="existing-goal-activeMonth hidden">{{goal.activeFor}}</div> 
+          <div class="existing-goal-ids hidden">{{goal.id}}</div>
 
         {% endfor %}
 

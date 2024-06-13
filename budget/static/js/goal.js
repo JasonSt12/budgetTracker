@@ -31,8 +31,8 @@ const DOM = {};
 DOM["existingMonthlyBudgets"] = document.querySelectorAll(
   ".existing-goal-monthlyBudget"
 );
-
 DOM["existingGoalNames"] = document.querySelectorAll(".existing-goal-name");
+DOM["existingGoalIds"] = document.querySelectorAll(".existing-goal-ids");
 
 let newGoalValues = {};
 
@@ -175,12 +175,55 @@ for (let i = 0; i < goalCollapseButtons.length; i++) {
   });
 }
 
+// Insert Goal data into goal dropdown
 for (let i = 0; i < goalDropdownContainers.length; i++) {
   const goalData = JSON.parse(existingGoalValues[i].textContent);
 
   for (key in goalData) {
-    let html = `<div>${key}: ${goalData[key]}</div>`;
+    let html = `<div>${key}: ${goalData[key]}%</div>`;
     goalDropdownContainers[i].insertAdjacentHTML("beforeend", html);
+  }
+}
+
+document
+  .getElementById("add-category-btn-edit")
+  .addEventListener("click", function () {
+    const newCategory = document.getElementById("new-category-edit");
+    const newPercent = document.getElementById("new-category-percent-edit");
+    const errorMessage_edit = document.getElementById("error-message-edit");
+
+    if (newCategory.value === "" || newPercent.value === "") {
+      errorMessage_edit.textContent =
+        "Please Provide A Category Name And Percent";
+    } else {
+      const categoryListItem = `
+        <div class="category-list-item">
+          <div class="d-flex align-items-center">
+            <input class="form-control me-1 mb-1" type="text" value="${newCategory.value}"/>
+            <input class="form-control mb-1" type="text" value="${newPercent.value}"/>
+          </div>
+          <i class="fa-solid fa-x ms-2 delete-existing-category"></i>
+        </div>`;
+
+      document
+        .querySelector(".category-list-container-edit")
+        .insertAdjacentHTML("beforeend", categoryListItem);
+
+      newCategory.value = "";
+      newPercent.value = "";
+      errorMessage_edit.textContent = "";
+      activateCategoryDeleteButtons();
+    }
+  });
+
+function activateCategoryDeleteButtons() {
+  DOM["deleteExistingCategoryBtns"] = document.querySelectorAll(
+    ".delete-existing-category"
+  );
+  for (let i = 0; i < DOM.deleteExistingCategoryBtns.length; i++) {
+    DOM.deleteExistingCategoryBtns[i].addEventListener("click", function () {
+      this.parentElement.remove();
+    });
   }
 }
 
@@ -203,16 +246,68 @@ for (let i = 0; i < goalEditButtons.length; i++) {
         .insertAdjacentHTML("beforeend", categoryListItem);
     }
 
+    // get the category delete buttons
+    activateCategoryDeleteButtons();
+
     document.getElementById("monthly-budget-edit").value =
       DOM.existingMonthlyBudgets[i].textContent;
 
     document.getElementById("goal-name-edit").value =
       DOM.existingGoalNames[i].textContent;
 
+    document.getElementById("updated-active-month").value =
+      existingGoalActiveMonths[i].textContent;
+
+    document.getElementById("updated-goal-id").value =
+      DOM.existingGoalIds[i].textContent;
+
+    document.getElementById("active-month-edit").textContent =
+      existingGoalActiveMonths[i].textContent;
+
+    document.getElementById("info-message").textContent =
+      "Deleting A Category Will Delete The Corresponding Expenses";
     document.getElementById("create-goal-form").classList.add("hidden");
     document.getElementById("edit-goal-form").classList.remove("hidden");
   });
 }
+
+document
+  .getElementById("save-updates-btn")
+  .addEventListener("click", function () {
+    const errorMessage_edit = document.getElementById("error-message-edit");
+    const monthlyBudget_edit = document.getElementById("monthly-budget-edit");
+    const goalName_edit = document.getElementById("goal-name-edit");
+
+    const categoryNodes = document.querySelector(
+      ".category-list-container-edit"
+    ).children;
+
+    let percentSum = 0;
+    const updatedCategories = {};
+    for (let i = 0; i < categoryNodes.length; i++) {
+      const inputContainer = categoryNodes[i].firstElementChild;
+      const inputNodes = inputContainer.children;
+
+      // inputNodes[0] category
+      // inputNodes[1] percent
+      updatedCategories[inputNodes[0].value] = inputNodes[1].value;
+      percentSum += Number(inputNodes[1].value);
+    }
+
+    if (percentSum !== 100) {
+      errorMessage_edit.textContent = "Percentages Do Not Add Up To 100";
+    } else if (monthlyBudget_edit.value === "") {
+      errorMessage_edit.textContent = "Monthly Budget Not Set";
+    } else if (goalName_edit.value === "") {
+      errorMessage_edit.textContent = "Goal Name Not Set";
+    } else {
+      document.getElementById("create-goal-form").classList.remove("hidden");
+      document.getElementById("edit-goal-form").classList.add("hidden");
+      document.getElementById("updated-goal-values").value =
+        JSON.stringify(updatedCategories);
+      this.closest("form").submit();
+    }
+  });
 
 //
 // Chart code below

@@ -23,3 +23,10 @@ class CreateGoalForm(forms.Form):
     goal_name = forms.CharField()
     active_month = forms.CharField()
     active_year = forms.IntegerField()
+
+class UpdateGoalForm(forms.Form):
+    monthly_budget = forms.IntegerField()
+    goal_values = forms.JSONField()
+    goal_name = forms.CharField()
+    active_for = forms.CharField() # actvie month and year
+    goal_id = forms.IntegerField()

@@ -31,35 +31,40 @@ menuButton.addEventListener("click", function () {
 });
 
 function openCategoryDropdown(buttonIndex) {
-  const expenseList =
-    dropdownButtons[buttonIndex].parentElement.parentElement.nextElementSibling;
-  const listItems = expenseList.children;
-  // height of one epxense list item * number of list items
-  if (listItems.length > 0) {
-    const listHeight = listItems[0].offsetHeight * listItems.length;
-    expenseList.style.height = listHeight;
-  }
+  if (dropdownButtons.length !== 0) {
+    const expenseList =
+      dropdownButtons[buttonIndex].parentElement.parentElement
+        .nextElementSibling;
+    const listItems = expenseList.children;
+    // height of one epxense list item * number of list items
+    if (listItems.length > 0) {
+      const listHeight = listItems[0].offsetHeight * listItems.length;
+      expenseList.style.height = listHeight;
+    }
 
-  dropdownButtons[buttonIndex].classList.add("hidden");
-  collapseButtons[buttonIndex].classList.remove("hidden");
+    dropdownButtons[buttonIndex].classList.add("hidden");
+    collapseButtons[buttonIndex].classList.remove("hidden");
+  }
 }
 
 // Creates eventListener for close category dropdown button
 function closeCategoryDropdown(buttonIndex) {
-  collapseButtons[buttonIndex].addEventListener("click", function () {
-    const expenseList =
-      dropdownButtons[buttonIndex].parentElement.parentElement
-        .nextElementSibling;
+  if (collapseButtons.length !== 0) {
+    collapseButtons[buttonIndex].addEventListener("click", function () {
+      const expenseList =
+        dropdownButtons[buttonIndex].parentElement.parentElement
+          .nextElementSibling;
 
-    expenseList.style.height = "0";
-    dropdownButtons[buttonIndex].classList.remove("hidden");
-    collapseButtons[buttonIndex].classList.add("hidden");
+      expenseList.style.height = "0";
+      dropdownButtons[buttonIndex].classList.remove("hidden");
+      collapseButtons[buttonIndex].classList.add("hidden");
 
-    const index = openCategories.indexOf(buttonIndex);
-    if (index > -1) openCategories.splice(index, 1);
+      const index = openCategories.indexOf(buttonIndex);
+      if (index > -1) openCategories.splice(index, 1);
 
-    localStorage.setItem("openCategories", openCategories);
-  });
+      localStorage.setItem("openCategories", openCategories);
+    });
+  }
 }
 
 function openDropdownsOnLoad() {
@@ -137,9 +142,6 @@ for (let i = 0; i < editButtons.length; i++) {
 
 const totalSpent = document.getElementById("total-spent");
 const totalRemining = document.getElementById("total-remaining");
-
-console.log("totalSpent = ", totalSpent);
-console.log("totalRemaining = ", totalRemining.textContent);
 
 const chart = new Chart("spent-remaining-chart", {
   type: "doughnut",

@@ -14,4 +14,5 @@ urlpatterns = [
     path('editExpense/<int:expense_id>', views.editExpense, name='editExpense'),
     path('goal/', views.goal, name="goal"),
     path('createGoal/', views.createGoal, name="createGoal"),
+    path('updateGoal/', views.updateGoal, name="updateGoal"),
 ]
