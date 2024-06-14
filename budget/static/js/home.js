@@ -1,39 +1,36 @@
-const menuButton = document.querySelector(".menu-button");
-const dropdownButtons = document.querySelectorAll(".fa-angle-down");
-const collapseButtons = document.querySelectorAll(".fa-angle-up");
-const monthButtons = document.querySelectorAll(".month-button");
-const selectedMonth = document.getElementById("selected-month");
-const addExpenseButton = document.getElementById("add-expense-btn");
-const addExpenseContainer = document.querySelector(".add-expense-container");
-const closeAddExpense = document.getElementById("add-expense-X");
-const addCategoryButton = document.getElementById("add-category-btn");
-const categoryOptions = document.querySelectorAll(".category-option");
-const addCategoryDropdown = document.getElementById("add-category-dropdown");
-const selectedCategory = document.getElementById("selected-category");
-const deleteExpenseButtons = document.querySelectorAll(".fa-trash-can");
-const editButtons = document.querySelectorAll(".fa-pen-to-square");
-const expenseData = document.querySelectorAll(".expense-data");
-const editExpenseForms = document.querySelectorAll(".edit-expense-form");
+// const menuButton = document.querySelector(".menu-button");
+const homeDOM = {};
+homeDOM["collapseButtons"] = document.querySelectorAll(".fa-angle-up");
+homeDOM["dropdownButtons"] = document.querySelectorAll(".fa-angle-down");
+homeDOM["addExpenseContainer"] = document.querySelector(
+  ".add-expense-container"
+);
+homeDOM["addCategoryDropdown"] = document.getElementById(
+  "add-category-dropdown"
+);
+homeDOM["editButtons"] = document.querySelectorAll(".fa-pen-to-square");
+homeDOM["expenseData"] = document.querySelectorAll(".expense-data");
+homeDOM["editExpenseForms"] = document.querySelectorAll(".edit-expense-form");
 
-let columnWidth = "0px";
-menuButton.addEventListener("click", function () {
-  if (columnWidth === "0px") {
-    document.querySelector(".left-column").style.width = "15vw";
-    document.querySelector(".header").style.marginLeft = "15vw";
-    document.querySelector(".main-container").style.marginLeft = "15vw";
-  } else {
-    document.querySelector(".left-column").style.width = "0";
-    document.querySelector(".header").style.marginLeft = "0";
-    document.querySelector(".main-container").style.marginLeft = "0";
-  }
+// let columnWidth = "0px";
+// menuButton.addEventListener("click", function () {
+//   if (columnWidth === "0px") {
+//     document.querySelector(".left-column").style.width = "15vw";
+//     document.querySelector(".header").style.marginLeft = "15vw";
+//     document.querySelector(".main-container").style.marginLeft = "15vw";
+//   } else {
+//     document.querySelector(".left-column").style.width = "0";
+//     document.querySelector(".header").style.marginLeft = "0";
+//     document.querySelector(".main-container").style.marginLeft = "0";
+//   }
 
-  columnWidth = document.querySelector(".left-column").style.width;
-});
+//   columnWidth = document.querySelector(".left-column").style.width;
+// });
 
 function openCategoryDropdown(buttonIndex) {
-  if (dropdownButtons.length !== 0) {
+  if (homeDOM.dropdownButtons.length !== 0) {
     const expenseList =
-      dropdownButtons[buttonIndex].parentElement.parentElement
+      homeDOM.dropdownButtons[buttonIndex].parentElement.parentElement
         .nextElementSibling;
     const listItems = expenseList.children;
     // height of one epxense list item * number of list items
@@ -42,22 +39,22 @@ function openCategoryDropdown(buttonIndex) {
       expenseList.style.height = listHeight;
     }
 
-    dropdownButtons[buttonIndex].classList.add("hidden");
-    collapseButtons[buttonIndex].classList.remove("hidden");
+    homeDOM.dropdownButtons[buttonIndex].classList.add("hidden");
+    homeDOM.collapseButtons[buttonIndex].classList.remove("hidden");
   }
 }
 
 // Creates eventListener for close category dropdown button
 function closeCategoryDropdown(buttonIndex) {
-  if (collapseButtons.length !== 0) {
-    collapseButtons[buttonIndex].addEventListener("click", function () {
+  if (homeDOM.collapseButtons.length !== 0) {
+    homeDOM.collapseButtons[buttonIndex].addEventListener("click", function () {
       const expenseList =
-        dropdownButtons[buttonIndex].parentElement.parentElement
+        homeDOM.dropdownButtons[buttonIndex].parentElement.parentElement
           .nextElementSibling;
 
       expenseList.style.height = "0";
-      dropdownButtons[buttonIndex].classList.remove("hidden");
-      collapseButtons[buttonIndex].classList.add("hidden");
+      homeDOM.dropdownButtons[buttonIndex].classList.remove("hidden");
+      homeDOM.collapseButtons[buttonIndex].classList.add("hidden");
 
       const index = openCategories.indexOf(buttonIndex);
       if (index > -1) openCategories.splice(index, 1);
@@ -81,8 +78,8 @@ function openDropdownsOnLoad() {
 openDropdownsOnLoad();
 
 let openCategories = [];
-for (let i = 0; i < dropdownButtons.length; i++) {
-  dropdownButtons[i].addEventListener("click", function () {
+for (let i = 0; i < homeDOM.dropdownButtons.length; i++) {
+  homeDOM.dropdownButtons[i].addEventListener("click", function () {
     openCategoryDropdown(i);
     openCategories.push(i);
     // store the opened categories in localStorage to be able to keep them open
@@ -94,48 +91,51 @@ for (let i = 0; i < dropdownButtons.length; i++) {
   });
 }
 
-for (let i = 0; i < monthButtons.length; i++) {
-  monthButtons[i].addEventListener("click", function () {
-    selectedMonth.value = monthButtons[i].textContent;
+// Submits form when selecting an option in the month dropdown
+document.querySelectorAll(".month-button").forEach((button) => {
+  button.addEventListener("click", function () {
+    document.getElementById("selected-month").value = button.textContent;
     this.closest("form").submit();
   });
-}
-
-addExpenseButton.addEventListener("click", function () {
-  addExpenseContainer.classList.toggle("hidden");
 });
 
-closeAddExpense.addEventListener("click", function () {
-  addExpenseContainer.classList.add("hidden");
-});
-
-addCategoryButton.addEventListener("click", function () {
-  addCategoryDropdown.textContent = this.previousElementSibling.value;
-  selectedCategory.value = addCategoryDropdown.textContent;
-});
-
-for (let i = 0; i < categoryOptions.length; i++) {
-  categoryOptions[i].addEventListener("click", function () {
-    addCategoryDropdown.textContent = categoryOptions[i].textContent;
-    selectedCategory.value = addCategoryDropdown.textContent;
+document
+  .getElementById("add-expense-btn")
+  .addEventListener("click", function () {
+    homeDOM.addExpenseContainer.classList.toggle("hidden");
   });
-}
 
-for (let i = 0; i < editButtons.length; i++) {
-  editButtons[i].addEventListener("click", function () {
-    const checkmark = editButtons[i].nextElementSibling;
+document.getElementById("add-expense-X").addEventListener("click", function () {
+  homeDOM.addExpenseContainer.classList.add("hidden");
+});
+
+document
+  .getElementById("add-category-btn")
+  .addEventListener("click", function () {
+    homeDOM.addCategoryDropdown.textContent = this.previousElementSibling.value;
+    document.getElementById("selected-category").value =
+      homeDOM.addCategoryDropdown.textContent;
+  });
+
+document.querySelectorAll(".category-option").forEach((categoryOption) => {
+  categoryOption.addEventListener("click", function () {
+    homeDOM.addCategoryDropdown.textContent = categoryOption.textContent;
+    document.getElementById("selected-category").value =
+      homeDOM.addCategoryDropdown.textContent;
+  });
+});
+
+for (let i = 0; i < homeDOM.editButtons.length; i++) {
+  homeDOM.editButtons[i].addEventListener("click", function () {
+    const checkmark = homeDOM.editButtons[i].nextElementSibling;
     checkmark.classList.remove("hidden");
-    editButtons[i].classList.add("hidden");
+    homeDOM.editButtons[i].classList.add("hidden");
 
-    expenseData[i].classList.add("hidden");
-    editExpenseForms[i].classList.remove("hidden");
+    homeDOM.expenseData[i].classList.add("hidden");
+    homeDOM.editExpenseForms[i].classList.remove("hidden");
 
     checkmark.addEventListener("click", function () {
-      //   checkmark.classList.add("hidden");
-      //   editButtons[i].classList.remove("hidden");
-      //   expenseData[i].classList.remove("hidden");
-      //   editExpenseForms[i].classList.add("hidden");
-      editExpenseForms[i].submit();
+      homeDOM.editExpenseForms[i].submit();
     });
   });
 }

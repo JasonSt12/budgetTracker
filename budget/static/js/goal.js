@@ -1,4 +1,4 @@
-const menuButton = document.querySelector(".menu-button");
+// const menuButton = document.querySelector(".menu-button");
 const inputColumn = document.querySelector(".input-column");
 const rightColumn = document.querySelector(".right-column");
 const header = document.querySelector(".header");
@@ -37,19 +37,19 @@ DOM["existingGoalIds"] = document.querySelectorAll(".existing-goal-ids");
 let newGoalValues = {};
 
 let columnWidth = "0px";
-menuButton.addEventListener("click", function () {
-  if (columnWidth === "0px") {
-    document.querySelector(".left-column").style.width = "15vw";
-    document.querySelector(".header").style.marginLeft = "15vw";
-    document.querySelector(".main-container").style.marginLeft = "15vw";
-  } else {
-    document.querySelector(".left-column").style.width = "0";
-    document.querySelector(".header").style.marginLeft = "0";
-    document.querySelector(".main-container").style.marginLeft = "0";
-  }
+// menuButton.addEventListener("click", function () {
+//   if (columnWidth === "0px") {
+//     document.querySelector(".left-column").style.width = "15vw";
+//     document.querySelector(".header").style.marginLeft = "15vw";
+//     document.querySelector(".main-container").style.marginLeft = "15vw";
+//   } else {
+//     document.querySelector(".left-column").style.width = "0";
+//     document.querySelector(".header").style.marginLeft = "0";
+//     document.querySelector(".main-container").style.marginLeft = "0";
+//   }
 
-  columnWidth = document.querySelector(".left-column").style.width;
-});
+//   columnWidth = document.querySelector(".left-column").style.width;
+// });
 
 newCategoryButton.addEventListener("click", function () {
   if (newCategoryInput.value === "" || newCategoryPercent.value === "") {

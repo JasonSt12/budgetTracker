@@ -1,13 +1,39 @@
 <!DOCTYPE html>
-<header class="d-flex justify-content-center header">
-  <div class="ms-2 mt-auto mb-auto d-inline">
-    <button type="button "class="btn btn-outline-light menu-button">
+<header class="header">
+
+
+  {% comment %} <div class="ms-2 mt-auto mb-auto d-inline">
+    <button type="button "class="btn btn-outline-light menu-button hidden">
       <i class="fa-solid fa-bars"></i>
     </button>
-  </div>
-  <div class="me-auto ms-auto">
-    <a href="{% url 'budget:home' %}" style="text-decoration: none">
+  </div> {% endcomment %}
+
+  <div class="link-container">
+    <a href="{% url 'budget:home' %}" class="ms-2" style="text-decoration: none">
       <h1 class="title">Budget Tracker</h1>
+    </a>
+    {% comment %} <div class="ms-2 d-flex align-items-center divider">|</div> {% endcomment %}
+    <div class="title-divider ms-2"></div>
+    <a href="{% url 'budget:goal' %}" class="ms-2" style='text-decoration: none'>
+      <div class="header-links">
+        Manage Goal
+        <div class="underline"></div>
+      </div>  
+    <a/>
+
+    <a href="{% url 'budget:home' %}" class="me-auto ms-3" style='text-decoration: none'>
+      <div class="header-links">
+        Home
+        <div class="underline"></div>
+      </div>  
+    <a/>
+
+    <a class="ms-auto me-2" href="{% url 'budget:logout' %}">
+      <div class="header-links">
+        <i class="fa-solid fa-door-open me-1"></i>
+         Logout
+        <div class="underline"></div>
+      </div>
     </a>
   </div>
 </header>

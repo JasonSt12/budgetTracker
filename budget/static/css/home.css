@@ -16,44 +16,6 @@
   flex: 0 0 auto;
 }
 
-.logout-link {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-}
-
-.fa-door-open {
-  color: white;
-}
-
-.menu-link {
-  height: 8%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-decoration: none;
-}
-
-.menu-link:visited {
-  text-decoration: none;
-}
-
-.menu-link:hover {
-  text-decoration: none;
-  background-color: #5b6eb4;
-}
-
-.menu-link:active {
-  text-decoration: none;
-}
-
-#piechart {
-  width: 100%;
-  height: 100%;
-}
-
 .middle-column {
   flex: 1;
 }
@@ -139,10 +101,6 @@
   margin: 0;
   text-align: right;
 }
-
-/* .progress-bar {
-    background-color: lightgreen;
-} */
 
 .expense-list {
   height: 0;

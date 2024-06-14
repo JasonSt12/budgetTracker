@@ -1,3 +1,5 @@
+/* Contains styling for header */
+
 body,
 html {
   margin: 0;
@@ -9,10 +11,75 @@ html {
 }
 
 .header {
+  display: flex;
+  justify-content: left;
   background-color: #3d52a0;
   transition: 0.5s;
 }
 
 .title {
   color: white;
+  font-size: 2rem;
 }
+
+.title-divider {
+  /* border-left: 5px white; */
+  width: 1px;
+  height: 30px;
+  background-color: white;
+  rotate: 17deg;
+}
+
+.link-container {
+  display: flex;
+  align-items: center;
+  width: 1000%;
+}
+
+.header-links {
+  color: white;
+}
+
+.fa-door-open {
+  color: white;
+}
+
+.underline {
+  height: 2px;
+  width: 0;
+  background-color: white;
+  margin: 0;
+  transition: 0.3s;
+}
+
+/* 
+
+.logout-link {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.menu-link {
+  height: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+}
+
+
+.menu-link:visited {
+  text-decoration: none;
+}
+
+.menu-link:hover {
+  text-decoration: none;
+  background-color: #5b6eb4;
+}
+
+.menu-link:active {
+  text-decoration: none;
+} */

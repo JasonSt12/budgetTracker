@@ -65,7 +65,6 @@ def createAccount(request):
             else:
                 user = User.objects.create_user(username=username, password=pwd)
                 login(request, user)
-                Goal.objects.create(user=user, goal_name="Default Goal")
                 return redirect("budget:home")
         else:
             error = "Invalid form data"
@@ -188,21 +187,6 @@ def addExpense(request):
             category = form.cleaned_data["category"]
             value = form.cleaned_data["value"]
             description = form.cleaned_data["description"]
-
-            if Goal.objects.filter(user=request.user).exists():
-                goal = Goal.objects.filter(
-                    user=request.user, activeFor=selected_month
-                ).get()
-                # add category to the goal with negative value to allow for
-                # category_data processing to be done in home
-
-                # need to hvae user create goal first before adding any expenses
-                # can create empty goal if necessary
-
-                # or create a default goal on account creation
-                if category not in goal.goal.keys():
-                    goal.goal[category] = "-1"
-                goal.save()
 
             Expense.objects.create(
                 user=request.user,

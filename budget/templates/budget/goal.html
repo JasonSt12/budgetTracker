@@ -18,7 +18,7 @@
 
   <div class="d-flex main-container">
     
-    {% include "budget/includes/menu.html" %}
+    {% comment %} {% include "budget/includes/menu.html" %} {% endcomment %}
 
     <div class="input-column m-2">
       <form action="{% url 'budget:createGoal'%}" method="POST" id="create-goal-form">
