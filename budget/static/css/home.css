@@ -18,6 +18,7 @@
 
 .middle-column {
   flex: 1;
+  overflow-y: scroll;
 }
 
 .dropdown-toggle {
@@ -131,6 +132,10 @@
 
 .fa-check:hover {
   cursor: pointer;
+}
+
+.edit-expense-input {
+  height: 100%;
 }
 
 .fa-trash-can {

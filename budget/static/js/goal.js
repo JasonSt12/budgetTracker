@@ -1,42 +1,25 @@
 // const menuButton = document.querySelector(".menu-button");
-const inputColumn = document.querySelector(".input-column");
-const rightColumn = document.querySelector(".right-column");
-const header = document.querySelector(".header");
-const mainContainer = document.querySelector(".main-container");
-const newCategoryButton = document.getElementById("add-category-btn");
-const newCategoryInput = document.getElementById("new-category");
-const newCategoryPercent = document.getElementById("new-category-percent");
-const categoryListContainer = document.querySelector(
-  ".category-list-container"
+const goalDOM = {};
+goalDOM["errorMessage"] = document.getElementById("error-message");
+goalDOM["existingGoalValues"] = document.querySelectorAll(
+  ".existing-goal-values"
 );
-const newGoalValuesInput = document.getElementById("new-goal-values");
-
-const goalNameInput = document.querySelector(".goal-name");
-const setGoalBtn = document.getElementById("set-goal-btn");
-const errorMesage = document.getElementById("error-message");
-const yearSelector = document.getElementById("year-selector");
-const monthDropdownItems = document.querySelectorAll(".month-dropdown-item");
-const existingGoalValues = document.querySelectorAll(".existing-goal-values");
-const existingGoalActiveMonths = document.querySelectorAll(
+goalDOM["existingGoalActiveMonths"] = document.querySelectorAll(
   ".existing-goal-activeMonth"
 );
-const goalDropdownContainers = document.querySelectorAll(
+goalDOM["goalDropdownContainers"] = document.querySelectorAll(
   ".goal-dropdown-container"
 );
-const goalDropdownButtons = document.querySelectorAll(".fa-angle-down");
-const goalCollapseButtons = document.querySelectorAll(".fa-angle-up");
-const goalEditButtons = document.querySelectorAll(".fa-pen-to-square");
-
-const DOM = {};
-DOM["existingMonthlyBudgets"] = document.querySelectorAll(
+goalDOM["editButtons"] = document.querySelectorAll(".fa-pen-to-square");
+goalDOM["existingMonthlyBudgets"] = document.querySelectorAll(
   ".existing-goal-monthlyBudget"
 );
-DOM["existingGoalNames"] = document.querySelectorAll(".existing-goal-name");
-DOM["existingGoalIds"] = document.querySelectorAll(".existing-goal-ids");
+goalDOM["existingGoalNames"] = document.querySelectorAll(".existing-goal-name");
+goalDOM["existingGoalIds"] = document.querySelectorAll(".existing-goal-ids");
 
 let newGoalValues = {};
 
-let columnWidth = "0px";
+// let columnWidth = "0px";
 // menuButton.addEventListener("click", function () {
 //   if (columnWidth === "0px") {
 //     document.querySelector(".left-column").style.width = "15vw";
@@ -51,44 +34,53 @@ let columnWidth = "0px";
 //   columnWidth = document.querySelector(".left-column").style.width;
 // });
 
-newCategoryButton.addEventListener("click", function () {
-  if (newCategoryInput.value === "" || newCategoryPercent.value === "") {
-    errorMesage.textContent = "Please Provide A Category Name And Percent";
-  } else {
-    newGoalValues[newCategoryInput.value] = newCategoryPercent.value;
+document
+  .getElementById("add-category-btn")
+  .addEventListener("click", function () {
+    const newCategoryInput = document.getElementById("new-category");
+    const newCategoryPercent = document.getElementById("new-category-percent");
 
-    const categoryListItem = `
-  <div class="category-list-item">
-    <div>${newCategoryInput.value} ${newCategoryPercent.value}%</div>
-    <i class="fa-solid fa-x delete-new-category"></i>
-  </div>`;
+    if (newCategoryInput.value === "" || newCategoryPercent.value === "") {
+      goalDOM.errorMessage.textContent =
+        "Please Provide A Category Name And Percent";
+    } else {
+      newGoalValues[newCategoryInput.value] = newCategoryPercent.value;
 
-    categoryListContainer.insertAdjacentHTML("beforeend", categoryListItem);
+      const categoryListItem = `
+        <div class="category-list-item">
+          <div>${newCategoryInput.value} ${newCategoryPercent.value}%</div>
+          <i class="fa-solid fa-x delete-new-category"></i>
+        </div>`;
 
-    newCategoryInput.value = "";
-    newCategoryPercent.value = "";
-    errorMesage.textContent = "";
-  }
-});
+      document
+        .querySelector(".category-list-container")
+        .insertAdjacentHTML("beforeend", categoryListItem);
+
+      newCategoryInput.value = "";
+      newCategoryPercent.value = "";
+      goalDOM.errorMessage.textContent = "";
+    }
+  });
 
 // add event listener for deleting a category from a goal
 
 const currentYear = new Date().getFullYear();
 for (let i = currentYear; i >= 2000; i--) {
-  yearSelector.insertAdjacentHTML(
-    "beforeend",
-    `<li><a class="dropdown-item year-dropdown-item">${i}</a></li>`
-  );
+  document
+    .getElementById("year-selector")
+    .insertAdjacentHTML(
+      "beforeend",
+      `<li><a class="dropdown-item year-dropdown-item">${i}</a></li>`
+    );
 }
 
-// Adds event listeners for selecting the active month of a goal
-for (let i = 0; i < monthDropdownItems.length; i++) {
-  monthDropdownItems[i].addEventListener("click", function () {
+document.querySelectorAll(".month-dropdown-item").forEach((monthOption) => {
+  monthOption.addEventListener("click", function () {
     document.getElementById("month-dropdown-button").textContent =
       this.textContent;
     document.getElementById("active-month-input").value = this.textContent;
   });
-}
+});
 
 const yearDropdownItems = document.querySelectorAll(".year-dropdown-item");
 // Adds event listeners for selecting the active year of a goal
@@ -103,7 +95,7 @@ for (let i = 0; i < yearDropdownItems.length; i++) {
 // Adds event listener for delete category buttons. Need to have delteCategoryButtons
 // delcared inside the inputColumn event listener since categories are added
 // dynamically
-inputColumn.addEventListener("click", function () {
+document.querySelector(".input-column").addEventListener("click", function () {
   const deleteNewCategoryButtons = document.querySelectorAll(
     ".delete-new-category"
   );
@@ -125,17 +117,19 @@ function checkMonthDuplicates() {
   const selectedYear = document.getElementById("active-year-input").value;
   const selectedMonthYear = selectedMonth + " " + selectedYear;
 
-  for (let i = 0; i < existingGoalActiveMonths.length; i++) {
-    if (existingGoalActiveMonths[i].textContent === selectedMonthYear) {
+  for (let i = 0; i < goalDOM.existingGoalActiveMonths.length; i++) {
+    if (goalDOM.existingGoalActiveMonths[i].textContent === selectedMonthYear) {
       return true;
     }
   }
   return false;
 }
 
-setGoalBtn.addEventListener("click", function () {
-  newGoalValuesInput.value = JSON.stringify(newGoalValues);
+document.getElementById("set-goal-btn").addEventListener("click", function () {
+  document.getElementById("new-goal-values").value =
+    JSON.stringify(newGoalValues);
   const monthlyBudget = document.getElementById("monthly-budget");
+  const goalNameInput = document.querySelector(".goal-name");
 
   let categoryPercentSum = 0;
   for (let key in newGoalValues) {
@@ -143,45 +137,51 @@ setGoalBtn.addEventListener("click", function () {
   }
 
   if (categoryPercentSum !== 100) {
-    errorMesage.textContent = "Percentages Do Not Add Up To 100";
+    goalDOM.errorMessage.textContent = "Percentages Do Not Add Up To 100";
   } else if (checkMonthDuplicates()) {
-    errorMesage.textContent = `
+    goalDOM.errorMessage.textContent = `
       An existing goal has the same active month. 
       Two goals cannot have the same active month`;
   } else if (monthlyBudget.value === "") {
-    errorMesage.textContent = "Monthly Budget Not Set";
+    goalDOM.errorMessage.textContent = "Monthly Budget Not Set";
   } else if (goalNameInput.value === "") {
-    errorMesage.textContent = "Goal Name Not Set";
+    goalDOM.errorMessage.textContent = "Goal Name Not Set";
   } else {
     this.closest("form").submit();
   }
 });
 
-for (let i = 0; i < goalDropdownButtons.length; i++) {
-  goalDropdownButtons[i].addEventListener("click", function () {
-    goalDropdownContainers[i].style.height = "20vh";
-    goalDropdownContainers[i].style.overflow = "scroll";
-    goalCollapseButtons[i].classList.remove("hidden");
-    goalDropdownButtons[i].classList.add("hidden");
-  });
-}
+function activateGoalDropdowns() {
+  const goalDropdownButtons = document.querySelectorAll(".fa-angle-down");
+  const goalCollapseButtons = document.querySelectorAll(".fa-angle-up");
 
-for (let i = 0; i < goalCollapseButtons.length; i++) {
-  goalCollapseButtons[i].addEventListener("click", function () {
-    goalDropdownContainers[i].style.height = "0";
-    goalDropdownContainers[i].style.overflow = "hidden";
-    goalCollapseButtons[i].classList.add("hidden");
-    goalDropdownButtons[i].classList.remove("hidden");
-  });
+  for (let i = 0; i < goalDropdownButtons.length; i++) {
+    goalDropdownButtons[i].addEventListener("click", function () {
+      goalDOM.goalDropdownContainers[i].style.height = "20vh";
+      goalDOM.goalDropdownContainers[i].style.overflow = "scroll";
+      goalCollapseButtons[i].classList.remove("hidden");
+      goalDropdownButtons[i].classList.add("hidden");
+    });
+  }
+
+  for (let i = 0; i < goalCollapseButtons.length; i++) {
+    goalCollapseButtons[i].addEventListener("click", function () {
+      goalDOM.goalDropdownContainers[i].style.height = "0";
+      goalDOM.goalDropdownContainers[i].style.overflow = "hidden";
+      goalCollapseButtons[i].classList.add("hidden");
+      goalDropdownButtons[i].classList.remove("hidden");
+    });
+  }
 }
+activateGoalDropdowns();
 
 // Insert Goal data into goal dropdown
-for (let i = 0; i < goalDropdownContainers.length; i++) {
-  const goalData = JSON.parse(existingGoalValues[i].textContent);
+for (let i = 0; i < goalDOM.goalDropdownContainers.length; i++) {
+  const goalData = JSON.parse(goalDOM.existingGoalValues[i].textContent);
 
   for (key in goalData) {
     let html = `<div>${key}: ${goalData[key]}%</div>`;
-    goalDropdownContainers[i].insertAdjacentHTML("beforeend", html);
+    goalDOM.goalDropdownContainers[i].insertAdjacentHTML("beforeend", html);
   }
 }
 
@@ -217,19 +217,22 @@ document
   });
 
 function activateCategoryDeleteButtons() {
-  DOM["deleteExistingCategoryBtns"] = document.querySelectorAll(
+  goalDOM["deleteExistingCategoryBtns"] = document.querySelectorAll(
     ".delete-existing-category"
   );
-  for (let i = 0; i < DOM.deleteExistingCategoryBtns.length; i++) {
-    DOM.deleteExistingCategoryBtns[i].addEventListener("click", function () {
-      this.parentElement.remove();
-    });
+  for (let i = 0; i < goalDOM.deleteExistingCategoryBtns.length; i++) {
+    goalDOM.deleteExistingCategoryBtns[i].addEventListener(
+      "click",
+      function () {
+        this.parentElement.remove();
+      }
+    );
   }
 }
 
-for (let i = 0; i < goalEditButtons.length; i++) {
-  goalEditButtons[i].addEventListener("click", function () {
-    const goalData = JSON.parse(existingGoalValues[i].textContent);
+for (let i = 0; i < goalDOM.editButtons.length; i++) {
+  goalDOM.editButtons[i].addEventListener("click", function () {
+    const goalData = JSON.parse(goalDOM.existingGoalValues[i].textContent);
 
     for (key in goalData) {
       const categoryListItem = `
@@ -250,22 +253,20 @@ for (let i = 0; i < goalEditButtons.length; i++) {
     activateCategoryDeleteButtons();
 
     document.getElementById("monthly-budget-edit").value =
-      DOM.existingMonthlyBudgets[i].textContent;
+      goalDOM.existingMonthlyBudgets[i].textContent;
 
     document.getElementById("goal-name-edit").value =
-      DOM.existingGoalNames[i].textContent;
+      goalDOM.existingGoalNames[i].textContent;
 
     document.getElementById("updated-active-month").value =
-      existingGoalActiveMonths[i].textContent;
+      goalDOM.existingGoalActiveMonths[i].textContent;
 
     document.getElementById("updated-goal-id").value =
-      DOM.existingGoalIds[i].textContent;
+      goalDOM.existingGoalIds[i].textContent;
 
     document.getElementById("active-month-edit").textContent =
-      existingGoalActiveMonths[i].textContent;
+      goalDOM.existingGoalActiveMonths[i].textContent;
 
-    document.getElementById("info-message").textContent =
-      "Deleting A Category Will Delete The Corresponding Expenses";
     document.getElementById("create-goal-form").classList.add("hidden");
     document.getElementById("edit-goal-form").classList.remove("hidden");
   });
@@ -333,9 +334,9 @@ function setChartData() {
 
   const currentMonthYear = months[currentMonth] + " " + currentYear;
 
-  for (let i = 0; i < existingGoalActiveMonths.length; i++) {
-    if (existingGoalActiveMonths[i].textContent === currentMonthYear) {
-      const currentGoal = JSON.parse(existingGoalValues[i].textContent);
+  for (let i = 0; i < goalDOM.existingGoalActiveMonths.length; i++) {
+    if (goalDOM.existingGoalActiveMonths[i].textContent === currentMonthYear) {
+      const currentGoal = JSON.parse(goalDOM.existingGoalValues[i].textContent);
 
       for (key in currentGoal) {
         chartLabels.push(key);

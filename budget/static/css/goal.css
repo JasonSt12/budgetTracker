@@ -18,6 +18,7 @@
 
 .input-column {
   width: 30%;
+  overflow-y: scroll;
 }
 
 .category-list-container .category-list-container-edit {
