@@ -11,7 +11,9 @@ homeDOM["addCategoryDropdown"] = document.getElementById(
 homeDOM["editButtons"] = document.querySelectorAll(".fa-pen-to-square");
 homeDOM["expenseData"] = document.querySelectorAll(".expense-data");
 homeDOM["editExpenseForms"] = document.querySelectorAll(".edit-expense-form");
+let openCategories = []; // stores which category dropdowns are open
 
+// For pop out menu. Not implemented in this iteration
 // let columnWidth = "0px";
 // menuButton.addEventListener("click", function () {
 //   if (columnWidth === "0px") {
@@ -29,6 +31,7 @@ homeDOM["editExpenseForms"] = document.querySelectorAll(".edit-expense-form");
 
 function openCategoryDropdown(buttonIndex) {
   if (homeDOM.dropdownButtons.length !== 0) {
+    // gets the expense list container
     const expenseList =
       homeDOM.dropdownButtons[buttonIndex].parentElement.parentElement
         .nextElementSibling;
@@ -36,26 +39,32 @@ function openCategoryDropdown(buttonIndex) {
     // height of one epxense list item * number of list items
     if (listItems.length > 0) {
       const listHeight = listItems[0].offsetHeight * listItems.length;
+      // increase expense list container height to the value of listHeight
       expenseList.style.height = listHeight;
     }
 
+    // hide dropdown button and show collapse button
     homeDOM.dropdownButtons[buttonIndex].classList.add("hidden");
     homeDOM.collapseButtons[buttonIndex].classList.remove("hidden");
   }
 }
 
-// Creates eventListener for close category dropdown button
+// Creates eventListener for close category dropdown buttons
 function closeCategoryDropdown(buttonIndex) {
   if (homeDOM.collapseButtons.length !== 0) {
     homeDOM.collapseButtons[buttonIndex].addEventListener("click", function () {
+      // gets the expense list container
       const expenseList =
         homeDOM.dropdownButtons[buttonIndex].parentElement.parentElement
           .nextElementSibling;
 
+      // mkae expense list invisible by setting its height to 0px
       expenseList.style.height = "0";
+      // hide collapse button and show dropdown button
       homeDOM.dropdownButtons[buttonIndex].classList.remove("hidden");
       homeDOM.collapseButtons[buttonIndex].classList.add("hidden");
 
+      // remove current category from list of open categories
       const index = openCategories.indexOf(buttonIndex);
       if (index > -1) openCategories.splice(index, 1);
 
@@ -77,7 +86,6 @@ function openDropdownsOnLoad() {
 }
 openDropdownsOnLoad();
 
-let openCategories = [];
 for (let i = 0; i < homeDOM.dropdownButtons.length; i++) {
   homeDOM.dropdownButtons[i].addEventListener("click", function () {
     openCategoryDropdown(i);
@@ -99,33 +107,44 @@ document.querySelectorAll(".month-button").forEach((button) => {
   });
 });
 
+// shows the add expense component when add expense button is clicked
 document
   .getElementById("add-expense-btn")
   .addEventListener("click", function () {
     homeDOM.addExpenseContainer.classList.toggle("hidden");
   });
 
+// close add expeense container
 document.getElementById("add-expense-X").addEventListener("click", function () {
   homeDOM.addExpenseContainer.classList.add("hidden");
 });
 
+// Add category ti the list of available categories
+// when adding an expense
 document
   .getElementById("add-category-btn")
   .addEventListener("click", function () {
+    // this.previousElementSiling is the input for the new category name
     homeDOM.addCategoryDropdown.textContent = this.previousElementSibling.value;
     document.getElementById("selected-category").value =
       homeDOM.addCategoryDropdown.textContent;
   });
 
+// event listener for the category options in the add expense category dropdown
 document.querySelectorAll(".category-option").forEach((categoryOption) => {
   categoryOption.addEventListener("click", function () {
+    // Sets the text for the category dropdown button to the value of the
+    // selected category
     homeDOM.addCategoryDropdown.textContent = categoryOption.textContent;
+    // sets the value of the selected category input tag to the value of
+    // the category that the user selected
     document.getElementById("selected-category").value =
       homeDOM.addCategoryDropdown.textContent;
   });
 });
 
 for (let i = 0; i < homeDOM.editButtons.length; i++) {
+  // displays the inputs for editing an expense when an edit button is clicked
   homeDOM.editButtons[i].addEventListener("click", function () {
     const checkmark = homeDOM.editButtons[i].nextElementSibling;
     checkmark.classList.remove("hidden");

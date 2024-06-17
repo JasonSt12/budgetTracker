@@ -17,8 +17,9 @@ goalDOM["existingMonthlyBudgets"] = document.querySelectorAll(
 goalDOM["existingGoalNames"] = document.querySelectorAll(".existing-goal-name");
 goalDOM["existingGoalIds"] = document.querySelectorAll(".existing-goal-ids");
 
-let newGoalValues = {};
+let newGoalValues = {}; // stores the values of a newly created goal
 
+// For pop out menu. Not implemented in this iteration
 // let columnWidth = "0px";
 // menuButton.addEventListener("click", function () {
 //   if (columnWidth === "0px") {
@@ -40,18 +41,24 @@ document
     const newCategoryInput = document.getElementById("new-category");
     const newCategoryPercent = document.getElementById("new-category-percent");
 
+    // Validate that a user has given a category name and percent value for
+    // the new category
     if (newCategoryInput.value === "" || newCategoryPercent.value === "") {
       goalDOM.errorMessage.textContent =
         "Please Provide A Category Name And Percent";
     } else {
+      // add category and percent to the newGoalValues object
       newGoalValues[newCategoryInput.value] = newCategoryPercent.value;
 
+      // HTML to display newly created category
       const categoryListItem = `
         <div class="category-list-item">
           <div>${newCategoryInput.value} ${newCategoryPercent.value}%</div>
           <i class="fa-solid fa-x delete-new-category"></i>
         </div>`;
 
+      // insert the html and remove the inputted values from the percent
+      // and category name input tags
       document
         .querySelector(".category-list-container")
         .insertAdjacentHTML("beforeend", categoryListItem);
@@ -62,10 +69,9 @@ document
     }
   });
 
-// add event listener for deleting a category from a goal
-
 const currentYear = new Date().getFullYear();
 for (let i = currentYear; i >= 2000; i--) {
+  // inserts the years 2000 to current year in the year dropdown menu.
   document
     .getElementById("year-selector")
     .insertAdjacentHTML(
@@ -76,8 +82,13 @@ for (let i = currentYear; i >= 2000; i--) {
 
 document.querySelectorAll(".month-dropdown-item").forEach((monthOption) => {
   monthOption.addEventListener("click", function () {
+    // set the value of the month dropdown button text to the value of the month
+    // that was selected
     document.getElementById("month-dropdown-button").textContent =
       this.textContent;
+
+    // set the value of the active month input tag to the value
+    // of the selected month
     document.getElementById("active-month-input").value = this.textContent;
   });
 });
@@ -93,8 +104,9 @@ for (let i = 0; i < yearDropdownItems.length; i++) {
 }
 
 // Adds event listener for delete category buttons. Need to have delteCategoryButtons
-// delcared inside the inputColumn event listener since categories are added
-// dynamically
+// delcared inside the inputColumn click event listener since categories are added
+// dynamically, and the event listeners for the delete category buttons would not
+// be initialized on page load
 document.querySelector(".input-column").addEventListener("click", function () {
   const deleteNewCategoryButtons = document.querySelectorAll(
     ".delete-new-category"
@@ -111,7 +123,7 @@ document.querySelector(".input-column").addEventListener("click", function () {
 });
 
 // Makes sure there are no other goals with the same active month
-// as the new goal. Returns true for a duplicate
+// as the new goal. Returns true for a duplicate false for no duplicates
 function checkMonthDuplicates() {
   const selectedMonth = document.getElementById("active-month-input").value;
   const selectedYear = document.getElementById("active-year-input").value;
@@ -131,11 +143,13 @@ document.getElementById("set-goal-btn").addEventListener("click", function () {
   const monthlyBudget = document.getElementById("monthly-budget");
   const goalNameInput = document.querySelector(".goal-name");
 
+  // calculates the total of the new percentages
   let categoryPercentSum = 0;
   for (let key in newGoalValues) {
     categoryPercentSum += Number(newGoalValues[key]);
   }
 
+  // Input validation for a new goal
   if (categoryPercentSum !== 100) {
     goalDOM.errorMessage.textContent = "Percentages Do Not Add Up To 100";
   } else if (checkMonthDuplicates()) {
@@ -175,7 +189,7 @@ function activateGoalDropdowns() {
 }
 activateGoalDropdowns();
 
-// Insert Goal data into goal dropdown
+// Insert Goal data into the respective goal dropdown.
 for (let i = 0; i < goalDOM.goalDropdownContainers.length; i++) {
   const goalData = JSON.parse(goalDOM.existingGoalValues[i].textContent);
 
@@ -185,6 +199,7 @@ for (let i = 0; i < goalDOM.goalDropdownContainers.length; i++) {
   }
 }
 
+// Adds event listener for adding a category in the goal edit form
 document
   .getElementById("add-category-btn-edit")
   .addEventListener("click", function () {
@@ -192,10 +207,12 @@ document
     const newPercent = document.getElementById("new-category-percent-edit");
     const errorMessage_edit = document.getElementById("error-message-edit");
 
+    // makes sure user gave a category name and percent value
     if (newCategory.value === "" || newPercent.value === "") {
       errorMessage_edit.textContent =
         "Please Provide A Category Name And Percent";
     } else {
+      // HTML for a category component in the edit form
       const categoryListItem = `
         <div class="category-list-item">
           <div class="d-flex align-items-center">
@@ -205,6 +222,7 @@ document
           <i class="fa-solid fa-x ms-2 delete-existing-category"></i>
         </div>`;
 
+      // insert new category component and clear the add category inputs
       document
         .querySelector(".category-list-container-edit")
         .insertAdjacentHTML("beforeend", categoryListItem);
@@ -212,10 +230,14 @@ document
       newCategory.value = "";
       newPercent.value = "";
       errorMessage_edit.textContent = "";
+
+      // Activate the delete button of the newly added category
       activateCategoryDeleteButtons();
     }
   });
 
+// Actviates the delete button for a category. Is used when a new category is
+// created in the goal edit form and when a goal is selected to be edited
 function activateCategoryDeleteButtons() {
   goalDOM["deleteExistingCategoryBtns"] = document.querySelectorAll(
     ".delete-existing-category"
@@ -230,11 +252,15 @@ function activateCategoryDeleteButtons() {
   }
 }
 
+// Creates event listeners for goal edit buttons
 for (let i = 0; i < goalDOM.editButtons.length; i++) {
   goalDOM.editButtons[i].addEventListener("click", function () {
+    // gets the data of the selected goal
     const goalData = JSON.parse(goalDOM.existingGoalValues[i].textContent);
 
     for (key in goalData) {
+      // creates category display components for the categories of the goal
+      // to be edited
       const categoryListItem = `
         <div class="category-list-item">
           <div class="d-flex align-items-center">
@@ -251,6 +277,8 @@ for (let i = 0; i < goalDOM.editButtons.length; i++) {
 
     activateCategoryDeleteButtons();
 
+    // sets values of input tags for the selected goal. These input tags are
+    // what are submitted in the form when a goal is updated.
     document.getElementById("monthly-budget-edit").value =
       goalDOM.existingMonthlyBudgets[i].textContent;
 
@@ -261,6 +289,8 @@ for (let i = 0; i < goalDOM.editButtons.length; i++) {
       goalDOM.existingGoalActiveMonths[i].textContent;
 
     document.querySelectorAll(".updated-goal-id").forEach((input) => {
+      // input 1 is for the update goal form. Input 2 is for the delete
+      // goal form
       input.value = goalDOM.existingGoalIds[i].textContent;
     });
 
@@ -305,6 +335,7 @@ document
       percentSum += Number(inputNodes[1].value);
     }
 
+    // Check for correct input and submit
     if (percentSum !== 100) {
       errorMessage_edit.textContent = "Percentages Do Not Add Up To 100";
     } else if (monthlyBudget_edit.value === "") {
@@ -316,7 +347,6 @@ document
       document.getElementById("edit-goal-form").classList.add("hidden");
       document.getElementById("updated-goal-values").value =
         JSON.stringify(updatedCategories);
-      // this.closest("form").submit();
       document.getElementById("edit-goal-form").submit();
     }
   });
@@ -344,7 +374,7 @@ function setChartData() {
   ];
 
   const currentMonthYear = months[currentMonth] + " " + currentYear;
-
+  // Get category and percent values of the current goal
   for (let i = 0; i < goalDOM.existingGoalActiveMonths.length; i++) {
     if (goalDOM.existingGoalActiveMonths[i].textContent === currentMonthYear) {
       const currentGoal = JSON.parse(goalDOM.existingGoalValues[i].textContent);
