@@ -102,7 +102,10 @@
         {% csrf_token %}
         <div class="input-group mb-2">
           <span class="input-group-text">Monthly Budget</span>
-          <input class="form-control" id="monthly-budget-edit" name="monthly_budget" type="number"/>
+          <input class="form-control" 
+                 id="monthly-budget-edit" 
+                 name="monthly_budget" 
+                 type="number"/>
         </div>
 
         <div class="input-group mb-3">
@@ -122,14 +125,36 @@
           <p>Active Month:&nbsp;</p>
           <p id="active-month-edit"></p>
         </div>
+        
+
+        
         <div class="d-flex mt-2">
           <button class="btn btn-secondary" type="button" id="save-updates-btn">Save</button>
-          <input class="form-control ms-1 goal-name" id="goal-name-edit" name="goal_name" placeholder="Goal Name"/>
+          <input class="form-control ms-1 me-1 goal-name" 
+                 id="goal-name-edit"  
+                 name="goal_name" 
+                 placeholder="Goal Name"/>
+
+          <button class="btn btn-outline-danger me-auto" 
+                  id="delete-goal-btn" 
+                  type="button">Delete Goal</button>
         </div>
+        
 
         <input type="hidden" name="goal_values" id="updated-goal-values"/>
         <input type="hidden" name="active_for" id="updated-active-month"/>
-        <input type="hidden" name="goal_id" id="updated-goal-id"/>
+        <input type="hidden" name="goal_id" class="updated-goal-id"/>
+        {% comment %} <input type="hidden" name="goal_id" id="updated-goal-id"/> {% endcomment %}
+      </form>
+      <form class="d-flex align-items-center hidden" 
+            action="{% url 'budget:deleteGoal' %}" 
+            id="delete-goal-form"
+            method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="goal_id" class="updated-goal-id"/>
+        <div>Confirm Delete:</div>
+        <button type="submit" class="btn btn-danger ms-1">Yes</button>
+        <button type="button" class="btn btn-secondary ms-1" id="cancel-delete">No</button>
       </form>
 
     </div>

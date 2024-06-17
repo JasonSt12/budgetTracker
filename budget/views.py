@@ -161,6 +161,7 @@ def home(request):
     return render(request, "budget/home.html", context)
 
 
+@login_required
 def monthSelector(request):
 
     if request.method == "GET":
@@ -174,6 +175,7 @@ def monthSelector(request):
     return redirect("budget:home")
 
 
+@login_required
 def addExpense(request):
 
     selected_month = getCurrentMonth()
@@ -201,6 +203,7 @@ def addExpense(request):
     return redirect("budget:home")
 
 
+@login_required
 def deleteExpense(request, expense_id):
 
     if request.method == "POST":
@@ -213,6 +216,7 @@ def deleteExpense(request, expense_id):
     return redirect("budget:home")
 
 
+@login_required
 def editExpense(request, expense_id):
 
     if request.method == "POST":
@@ -231,6 +235,7 @@ def editExpense(request, expense_id):
     return redirect("budget:home")
 
 
+@login_required
 def goal(request):
 
     context = dict()
@@ -255,6 +260,7 @@ def goal(request):
     return render(request, "budget/goal.html", context)
 
 
+@login_required
 def createGoal(request):
 
     if request.method == "POST":
@@ -282,6 +288,7 @@ def createGoal(request):
     return redirect("budget:goal")
 
 
+@login_required
 def updateGoal(request):
 
     if request.method == "POST":
@@ -300,6 +307,15 @@ def updateGoal(request):
         else:
             print("error: ", form.errors)
 
+    return redirect("budget:goal")
+
+
+@login_required
+def deleteGoal(request):
+
+    if request.method == "POST":
+        goal_id = request.POST.get("goal_id")
+        Goal.objects.filter(id=goal_id).delete()
     return redirect("budget:goal")
 
 

@@ -249,7 +249,6 @@ for (let i = 0; i < goalDOM.editButtons.length; i++) {
         .insertAdjacentHTML("beforeend", categoryListItem);
     }
 
-    // get the category delete buttons
     activateCategoryDeleteButtons();
 
     document.getElementById("monthly-budget-edit").value =
@@ -261,8 +260,9 @@ for (let i = 0; i < goalDOM.editButtons.length; i++) {
     document.getElementById("updated-active-month").value =
       goalDOM.existingGoalActiveMonths[i].textContent;
 
-    document.getElementById("updated-goal-id").value =
-      goalDOM.existingGoalIds[i].textContent;
+    document.querySelectorAll(".updated-goal-id").forEach((input) => {
+      input.value = goalDOM.existingGoalIds[i].textContent;
+    });
 
     document.getElementById("active-month-edit").textContent =
       goalDOM.existingGoalActiveMonths[i].textContent;
@@ -271,6 +271,16 @@ for (let i = 0; i < goalDOM.editButtons.length; i++) {
     document.getElementById("edit-goal-form").classList.remove("hidden");
   });
 }
+
+document
+  .getElementById("delete-goal-btn")
+  .addEventListener("click", function () {
+    document.getElementById("delete-goal-form").classList.remove("hidden");
+  });
+
+document.getElementById("cancel-delete").addEventListener("click", function () {
+  document.getElementById("delete-goal-form").classList.add("hidden");
+});
 
 document
   .getElementById("save-updates-btn")
@@ -306,7 +316,8 @@ document
       document.getElementById("edit-goal-form").classList.add("hidden");
       document.getElementById("updated-goal-values").value =
         JSON.stringify(updatedCategories);
-      this.closest("form").submit();
+      // this.closest("form").submit();
+      document.getElementById("edit-goal-form").submit();
     }
   });
 
