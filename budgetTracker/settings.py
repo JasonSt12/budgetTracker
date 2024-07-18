@@ -28,8 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["budgettracker-yz11.onrender.com", "127.0.0.1"]
 
-# Budget123
-
 
 # Application definition
 
