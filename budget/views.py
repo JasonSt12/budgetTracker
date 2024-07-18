@@ -145,7 +145,6 @@ def home(request):
 
         total_remaining = 0
         if goal != None:
-            print("here  ", total_spent)
             total_remaining = round(goal.monthly_budget - total_spent, 2)
 
         context = {
